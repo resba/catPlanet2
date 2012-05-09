@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<!-- ===================================================================== -->
+<!-- Developing Games in Java                                              -->
+<!-- Chapter 18: Last 10% (JNLP)                                           -->
+<!-- Ant 1.5 build file                                                    -->
+<!-- ===================================================================== -->
+
+<project name="chap18 - Last 10% (JNLP)" default="build" basedir=".">
+
+    <property name="srcdir" value="src"/>
+    <property name="destdir" value="build"/>
+    <property name="docdir" value="doc"/>
+
+    <!-- Allow user to override properties without editing this file -->
+    <property file="${user.home}/.ant.properties" />
+
+
+    <!-- ================================================================= -->
+    <!-- Compile                                                           -->
+    <!-- ================================================================= -->
+    <target name="compile" description="Compiles the source code for this chapter">
+
+        <mkdir dir="${destdir}"/>
+
+        <javac srcdir="${srcdir}"
+               destdir="${destdir}"
+               debug="on" >
+
+            <include name="**/*.java"/>
+        </javac>
+
+    </target>
+
+
+    <!-- ================================================================= -->
+    <!-- Clean                                                             -->
+    <!-- ================================================================= -->
+    <target name="clean" description="Deletes the build directory for this chapter">
+        <delete dir="${destdir}" failonerror="false" />
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Build                                                               -->
+    <!-- =================================================================== -->
+    <target name="build" depends="clean, compile">
+
+        <jar jarfile="${basedir}/catplanet.jar">
+            <manifest>
+                <attribute name="Main-Class"
+                    value="com.resba.catplanet.tilegame.GameManager"/>
+            </manifest>
+
+            <fileset dir="${destdir}" includes="**/*.class" />
+        	<fileset dir="${basedir}" includes="images/**"/>
+        	<fileset dir="${basedir}" includes="sounds/**"/>
+        	<fileset dir="${basedir}" includes="maps/**"/>
+        </jar>
+
+
+        <jar jarfile="${basedir}/catplanetres.jar">
+            <fileset dir="${basedir}" includes="images/**"/>
+            <fileset dir="${basedir}" includes="sounds/**"/>
+            <fileset dir="${basedir}" includes="maps/**"/>
+        </jar>
+
+        <signjar jar="${basedir}/catplanet.jar"
+             storepass="secret"
+             alias="Nobody"
+             keystore="${basedir}/res/samplekeystore"/>
+
+        <signjar jar="${basedir}/catplanetres.jar"
+             storepass="secret"
+             alias="Nobody"
+             keystore="${basedir}/res/samplekeystore"/>
+
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Run Targets                                                         -->
+    <!-- =================================================================== -->
+    <target name="run-without-jnlp" description="">
+        <java
+            classname="com.resba.catplanet.tilegame.GameManager"
+            classpath="catplanet.jar;catplanetres.jar"
+            fork="true"
+            dir="${basedir}"
+            failonerror="true"
+            >
+        <jvmarg value="-Xprof"/>
+    </java>
+  </target>
+
+
+
+    <!-- =================================================================== -->
+    <!-- Javadoc                                                             -->
+    <!-- =================================================================== -->
+    <target name="javadoc" description="Creates API documentation (JavaDocs) for this chapter">
+
+        <delete dir="${docdir}" failonerror="false"/>
+        <mkdir dir="${docdir}"/>
+
+        <javadoc
+            destdir="${docdir}"
+            access="private"
+            author="true"
+            version="true"
+            use="true">
+
+            <fileset dir="${srcdir}">
+                <include name="*.java"/>
+            </fileset>
+
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+
+        </javadoc>
+
+    </target>
+
+
+</project>

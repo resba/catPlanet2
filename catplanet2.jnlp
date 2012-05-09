@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<jnlp 
+  spec="1.0+" 
+  codebase="http://www.brackeen.com/javagamebook" 
+  href="tilegame.jnlp"> 
+  <information> 
+    <title>Tile-based game</title> 
+    <vendor>David Brackeen</vendor> 
+    <homepage href="."/> 
+    <description>Tile-based game</description> 
+    <description kind="short">A demo from chapter 5.</description> 
+    <icon href="icon.gif"/> 
+    <icon kind="splash" href="splash.gif"/> 
+    <offline-allowed/> 
+  </information> 
+  <security>
+      <!-- get all permissions so we can access 
+      fullscreen exclusive mode -->
+      <all-permissions/> 
+  </security> 
+  <resources> 
+    <j2se version="1.4+" initial-heap-size="32m"/> 
+    <jar href="tilegame.jar"/>
+    <jar href="tilegameres.jar"/> 
+  </resources> 
+  <application-desc 
+    main-class="com.brackeen.javagamebook.tilegame.GameManager"/> 
+</jnlp> 
+
