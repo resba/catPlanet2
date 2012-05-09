@@ -65,16 +65,6 @@
             <fileset dir="${basedir}" includes="maps/**"/>
         </jar>
 
-        <signjar jar="${basedir}/catplanet.jar"
-             storepass="secret"
-             alias="Nobody"
-             keystore="${basedir}/res/samplekeystore"/>
-
-        <signjar jar="${basedir}/catplanetres.jar"
-             storepass="secret"
-             alias="Nobody"
-             keystore="${basedir}/res/samplekeystore"/>
-
     </target>
 
 

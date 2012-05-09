@@ -12,6 +12,7 @@ import com.resba.catplanet.input.*;
 import com.resba.catplanet.sound.*;
 import com.resba.catplanet.state.*;
 import com.resba.catplanet.tilegame.sprites.*;
+import com.resba.catplanet.util.CatLabel;
 
 public class MainGameState implements GameState {
 
@@ -381,6 +382,11 @@ public class MainGameState implements GameState {
                 // player dies!
                 player.setState(Creature.STATE_DYING);
             }
+        }
+        else if (collisionSprite instanceof Cat) {
+            Cat cuddlycat = (Cat)collisionSprite;
+                cuddlycat.setState(Cat.STATE_RAVE);
+                //map.findTexts(cuddlycat.getID()).setVisible(true);
         }
     }
 

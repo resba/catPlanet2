@@ -1,10 +1,12 @@
 package com.resba.catplanet.tilegame;
 
 import java.awt.Image;
+import java.awt.Label;
 import java.util.LinkedList;
 import java.util.Iterator;
 
 import com.resba.catplanet.graphics.Sprite;
+import com.resba.catplanet.util.CatLabel;
 
 /**
     The TileMap class contains the data for a tile-based
@@ -17,6 +19,7 @@ public class TileMap {
     private Image[][] tiles;
     private LinkedList sprites;
     private Sprite player;
+    private LinkedList texts;
 
     /**
         Creates a new TileMap with the specified width and
@@ -25,6 +28,7 @@ public class TileMap {
     public TileMap(int width, int height) {
         tiles = new Image[width][height];
         sprites = new LinkedList();
+        texts = new LinkedList();
     }
 
 
@@ -83,6 +87,18 @@ public class TileMap {
     public void setPlayer(Sprite player) {
         this.player = player;
     }
+    
+    public void setPlayerCoordinates(Sprite player, int x, int y){
+        player.setX(
+                TileMapRenderer.tilesToPixels(x) +
+                (TileMapRenderer.tilesToPixels(1) -
+                player.getWidth()) / 2);
+
+            // bottom-justify the sprite
+            player.setY(
+                TileMapRenderer.tilesToPixels(y + 1) -
+                player.getHeight());
+    }
 
 
     /**
@@ -108,5 +124,21 @@ public class TileMap {
     public Iterator getSprites() {
         return sprites.iterator();
     }
+    /*
+    public void addTexts(CatLabel lbl) {
+        texts.add(lbl);
+    }
 
+    public void removeTexts(CatLabel lbl) {
+        texts.remove(lbl);
+    }
+
+    public CatLabel findTexts(int index){
+    	return (CatLabel)texts.get(index);
+    }
+    
+    public Iterator getTexts() {
+        return texts.iterator();
+    }
+	*/
 }

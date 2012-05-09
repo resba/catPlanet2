@@ -10,6 +10,7 @@ import com.resba.catplanet.sound.MidiPlayer;
 import com.resba.catplanet.sound.SoundManager;
 import com.resba.catplanet.state.ResourceManager;
 import com.resba.catplanet.tilegame.sprites.*;
+import com.resba.catplanet.util.CatLabel;
 
 
 /**
@@ -29,6 +30,9 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Sprite goalSprite;
     private Sprite grubSprite;
     private Sprite flySprite;
+    private Sprite playerSpawn;
+    private Sprite catPlanetCat;
+    public int CATS = 0;
 
     /**
         Creates a new ResourceManager with the specified
@@ -68,6 +72,23 @@ public class CatPlanetResourceManager extends ResourceManager {
 
         return map;
     }
+    public TileMap selectMap(int mapInt) {
+        TileMap map = null;
+            try {
+                map = loadMap(
+                    "maps/map" + mapInt + ".txt");
+            }
+            catch (IOException ex) {
+                if (currentMap == 1) {
+                    // no maps to load!
+                    return null;
+                }
+                currentMap = 0;
+                map = null;
+            }
+
+        return map;
+    }
 
 
     public TileMap reloadMap() {
@@ -85,6 +106,8 @@ public class CatPlanetResourceManager extends ResourceManager {
     private TileMap loadMap(String filename)
         throws IOException
     {
+    	int spawnX = 0;
+    	int spawnY = 0;
         ArrayList lines = new ArrayList();
         int width = 0;
         int height = 0;
@@ -144,14 +167,22 @@ public class CatPlanetResourceManager extends ResourceManager {
                 else if (ch == '2') {
                     addSprite(newMap, flySprite, x, y);
                 }
+                else if (ch == '-') {
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                }
+                else if (ch == 'x') {
+                	addSprite(newMap, playerSpawn, x, y);
+                }
+                else if (ch == 'c') {
+                	addSprite(newMap, catPlanetCat, x, y);
+                }
             }
         }
-
-        // add the player to the map
-        Sprite player = (Sprite)playerSprite.clone();
-        player.setX(TileMapRenderer.tilesToPixels(3));
-        player.setY(0);
-        newMap.setPlayer(player);
 
         return newMap;
     }
@@ -177,8 +208,29 @@ public class CatPlanetResourceManager extends ResourceManager {
 
             // add it to the map
             map.addSprite(sprite);
+            
         }
     }
+    
+    private void addTexts(TileMap map,
+            String str, int tileX, int tileY, int catID)
+        {
+            	CatLabel lbl = new CatLabel(str, catID);
+
+                lbl.setLocation(
+                    TileMapRenderer.tilesToPixels(tileX) +
+                    (TileMapRenderer.tilesToPixels(1) -
+                    lbl.getWidth()) / 2,TileMapRenderer.tilesToPixels(tileY + 1) -
+                    lbl.getHeight());
+                
+                lbl.setForeground(Color.WHITE);
+                
+                lbl.setVisible(false);
+                
+                // add it to the map
+                //map.addTexts(lbl);
+                
+        }
 
 
     // -----------------------------------------------------------
@@ -239,6 +291,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         Animation[] playerAnim = new Animation[4];
         Animation[] flyAnim = new Animation[4];
         Animation[] grubAnim = new Animation[4];
+        Animation[] catAnim = new Animation[4];
         for (int i=0; i<4; i++) {
             playerAnim[i] = createPlayerAnim(
                 images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
@@ -246,6 +299,8 @@ public class CatPlanetResourceManager extends ResourceManager {
                 images[i][6], images[i][7], images[i][8]);
             grubAnim[i] = createGrubAnim(
                 images[i][9], images[i][10]);
+            catAnim[i] = createPlayerAnim(
+                    images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
         }
 
         // create creature sprites
@@ -255,6 +310,7 @@ public class CatPlanetResourceManager extends ResourceManager {
             flyAnim[2], flyAnim[3]);
         grubSprite = new Grub(grubAnim[0], grubAnim[1],
             grubAnim[2], grubAnim[3]);
+        catPlanetCat = new CatPlanetCat(catAnim[0], catAnim[1], catAnim[3]);
     }
 
 

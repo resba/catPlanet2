@@ -115,7 +115,7 @@ public class ScreenManager {
         frame.setUndecorated(true);
         frame.setIgnoreRepaint(true);
         frame.setResizable(false);
-
+        
         device.setFullScreenWindow(frame);
 
         if (displayMode != null &&
