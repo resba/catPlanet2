@@ -60,12 +60,12 @@ public class GameManager extends GameCore {
 
         log.info("init game states");
         gameStateManager = new GameStateManager(inputManager,
-            resourceManager.loadImage("loadingsplash.jpg"));
+            resourceManager.loadImage("loadingsplash.png"));
         gameStateManager.addState(new MainGameState(
             soundManager, midiPlayer,
             screen.getWidth(), screen.getHeight()));
         gameStateManager.addState(
-            new SplashGameState("gamesplash.jpg"));
+            new SplashGameState("gamesplash.png"));
 
         // load resources (in separate thread)
         new Thread() {

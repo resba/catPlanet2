@@ -36,6 +36,10 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Sprite playerSpawn;
     private Sprite catPlanetCat;
     private Transition transition;
+    private Sprite leftWallSpike;
+    private Sprite rightWallSpike;
+    private Sprite ceilingSpike;
+    private Sprite groundSpike;
     public int CATS = 0;
 
     /**
@@ -146,6 +150,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         TileMap newMap = new TileMap(width, height);
         for (int y=0; y<height; y++) {
             String line = lines.get(y);
+            int respawn = 0;
             for (int x=0; x<line.length(); x++) {
                 char ch = line.charAt(x);
 
@@ -181,11 +186,31 @@ public class CatPlanetResourceManager extends ResourceManager {
                     // add it to the map
                     newMap.setPlayer(player);
                 }
-                else if (ch == 'x') {
-                	addSprite(newMap, playerSpawn, x, y,'a','a');
-                }
+                //else if (ch == 'x') {
+                	/**TODO: Respawn**/
+                	//addSprite(newMap, playerSpawn, x, y,'r',Integer.toString(respawn).charAt(0)); //I'm a hackish little devil I am.
+                	//respawn++;
+                //}
                 else if (ch == 'c') {
+                	/**TODO: Cat Text**/
                 	addSprite(newMap, catPlanetCat, x, y,'a','a');
+                }
+                //Spikes
+                //Right Wall-spike
+                else if(ch == '{') {
+                	addSprite(newMap, rightWallSpike, x,y,'a','a');
+                }
+                //Left Wall-spike
+                else if(ch == '}') {
+                	addSprite(newMap, leftWallSpike, x,y,'a','a');
+                }
+                //Ground-spike
+                else if(ch == '^') {
+                	addSprite(newMap, groundSpike, x,y,'a','a');
+                }
+                //Ceiling Spike
+                else if(ch == 'v') {
+                	addSprite(newMap, ceilingSpike, x,y,'a','a');
                 }
                 // Map 1, region 0
                 else if (ch == '1' && line.charAt(x-1) == '0'){                
@@ -197,16 +222,18 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
+                /** TODO: Fix Horizontal Exits
                 // Map 2, region 0, horizontal exit
                 else if (ch == '2' && line.charAt(x-1) == '0'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x,y+1,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x,y-1,line.charAt(x-1),ch);
                 }
                 // Map 3, region 0, horizontal exit
                 else if (ch == '3' && line.charAt(x-1) == '0'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x,y+1,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x,y-1,line.charAt(x-1),ch);
                 }
+                **/
             }
         }
 
@@ -312,6 +339,10 @@ public class CatPlanetResourceManager extends ResourceManager {
             loadImage("grub1.png"),
             loadImage("grub2.png"),
             loadImage("transition.png"),
+            loadImage("spikes_down.png"),
+            loadImage("spikes_up.png"),
+            loadImage("spikes_left.png"),
+            loadImage("spikes_right.png"),
         };
 
         images[1] = new Image[images[0].length];
@@ -377,6 +408,10 @@ public class CatPlanetResourceManager extends ResourceManager {
         Animation[] grubAnim = new Animation[5];
         Animation[] catAnim = new Animation[5];
         Animation[] tranAnim = new Animation[5];
+        Animation[] spikeleftAnim = new Animation[5];
+        Animation[] spikerightAnim = new Animation[5];
+        Animation[] spikeupAnim = new Animation[5];
+        Animation[] spikedownAnim = new Animation[5];
         for (int i=0; i<4; i++) {
             playerAnim[i] = createPlayerAnim(
                 images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
@@ -386,10 +421,21 @@ public class CatPlanetResourceManager extends ResourceManager {
                 images[i][9], images[i][10]);
             
             tranAnim[i] = createTranAnim(images[i][11]);
+            spikeleftAnim[i] = createSpikeAnim(images[i][14]);
+            spikerightAnim[i] = createSpikeAnim(images[i][15]);
+            spikeupAnim[i] = createSpikeAnim(images[i][13]);
+            spikedownAnim[i] = createSpikeAnim(images[i][12]);
             
         }
         catAnim[4] = createCatAnim(images[4]);
 
+        /**
+         *     private Sprite leftWallSpike;
+    private Sprite rightWallSpike;
+    private Sprite ceilingSpike;
+    private Sprite groundSpike;
+         */
+        
         // create creature sprites
         playerSprite = new Player(playerAnim[1], playerAnim[0],
             playerAnim[2], playerAnim[3]);
@@ -399,7 +445,10 @@ public class CatPlanetResourceManager extends ResourceManager {
             grubAnim[2], grubAnim[3]);
         catPlanetCat = new CatPlanetCat(playerAnim[0], playerAnim[1], catAnim[4]);
         transition = new Transition(tranAnim[0]);
-        
+        leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[0],spikeleftAnim[0],spikeleftAnim[0]);
+        rightWallSpike = new Spike(spikerightAnim[0],spikerightAnim[0],spikerightAnim[0],spikerightAnim[0]);
+        ceilingSpike = new Spike(spikeupAnim[0],spikeupAnim[0],spikeupAnim[0],spikeupAnim[0]);
+        groundSpike = new Spike(spikedownAnim[0],spikedownAnim[0],spikedownAnim[0],spikedownAnim[0]);
         
     }
 
@@ -448,6 +497,12 @@ public class CatPlanetResourceManager extends ResourceManager {
     	for(int i = 0; images.length != i; i++){
     		anim.addFrame(images[i],100);
     	}
+    	return anim;
+    }
+    
+    private Animation createSpikeAnim(Image img){
+    	Animation anim = new Animation();
+    	anim.addFrame(img, 250);
     	return anim;
     }
 

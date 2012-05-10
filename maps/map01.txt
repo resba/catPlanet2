@@ -14,7 +14,7 @@
                        o o o        o o o       o     o      o 
                       IIIIIII      IIIIIII       o     o          
                                                   o         
-                 c                                  2EF
+                 c                                   EF
                  EF                                 EGD
     -   EF       CD                                EGAD     *
 BBBBBBBBGHBBBBBBBGHBBBBBBBBBBBBBB01BBBBBBBBBBBBBBBBBGAAHBBBBBBBBBBB
