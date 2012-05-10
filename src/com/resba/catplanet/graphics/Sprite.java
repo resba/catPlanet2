@@ -11,6 +11,9 @@ public class Sprite {
     // velocity (pixels per millisecond)
     private float dx;
     private float dy;
+    
+    private char region;
+    private char mapI;
 
     /**
         Creates a new Sprite object with the specified Animation.
@@ -118,5 +121,21 @@ public class Sprite {
     */
     public Object clone() {
         return new Sprite(anim);
+    }
+    
+    public char getRegion(){
+    	return this.region;
+    }
+
+    public char getMap(){
+    	return this.mapI;
+    }
+    
+    public void setRegion(char r){
+    	this.region = r;
+    }
+
+    public void setMap(char m){
+    	this.mapI = m;
     }
 }

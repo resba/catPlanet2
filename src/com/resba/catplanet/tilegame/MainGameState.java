@@ -82,7 +82,7 @@ public class MainGameState implements GameState {
             resourceManager.loadImage("background.png"));
 
         // load first map
-        map = resourceManager.loadNextMap();
+        map = resourceManager.loadFirstMap();
 
         // load sounds
         prizeSound = resourceManager.loadSound("sounds/prize.wav");
@@ -253,6 +253,7 @@ public class MainGameState implements GameState {
 
         // player is dead! start map over
         if (player.getState() == Creature.STATE_DEAD) {
+        	/** TODO **/
             map = resourceManager.reloadMap();
             return;
         }
@@ -388,6 +389,10 @@ public class MainGameState implements GameState {
                 cuddlycat.setState(Cat.STATE_RAVE);
                 //map.findTexts(cuddlycat.getID()).setVisible(true);
         }
+        else if (collisionSprite instanceof Transition) {
+        	Transition t = (Transition)collisionSprite;
+        	map = resourceManager.selectMap(t.getRegion(), t.getMap());
+        }
     }
 
 
@@ -412,7 +417,7 @@ public class MainGameState implements GameState {
             // advance to next map
             soundManager.play(prizeSound,
                 new EchoFilter(2000, .7f), false);
-            map = resourceManager.loadNextMap();
+            map = resourceManager.selectMap('0', '2');
         }
     }
 
