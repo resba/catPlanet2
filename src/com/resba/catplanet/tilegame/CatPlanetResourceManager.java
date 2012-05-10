@@ -24,7 +24,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private ArrayList<Image> tiles;
     private ArrayList<Character> regions;
     private ArrayList<Character> maps;
-    private int currentMap;
+    private String currentMap;
 
     // host sprites used for cloning
     private Sprite playerSprite;
@@ -41,6 +41,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Sprite ceilingSpike;
     private Sprite groundSpike;
     public int CATS = 0;
+    private boolean mapside;
 
     /**
         Creates a new ResourceManager with the specified
@@ -63,17 +64,20 @@ public class CatPlanetResourceManager extends ResourceManager {
 
 
     public TileMap loadFirstMap() {
+    	
+    	this.mapside = false;
+    	
         TileMap map = null;
             try {
                 map = loadMap(
-                    "maps/map01.txt");
+                    "maps/map01.txt",mapside);
             }
             catch (IOException ex) {
-                if (currentMap == 01) {
+                if (currentMap == "map01") {
                     // no maps to load!
                     return null;
                 }
-                currentMap = 01;
+                currentMap = "map01";
                 map = null;
         }
 
@@ -83,15 +87,15 @@ public class CatPlanetResourceManager extends ResourceManager {
         TileMap map = null;
             try {
                 map = loadMap(
-                    "maps/map" + regID +""+ mapID + ".txt");
-                currentMap = Integer.parseInt(regID+""+mapID);
+                    "maps/map" + regID +""+ mapID + ".txt", mapside);
+                currentMap = "map"+regID+""+mapID;
             }
             catch (IOException ex) {
-                if (currentMap == 01) {
+                if (currentMap == "map01") {
                     // no maps to load!
                     return null;
                 }
-                currentMap = 01;
+                currentMap = "map01";
                 map = null;
             }
 
@@ -102,7 +106,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     public TileMap reloadMap() {
         try {
             return loadMap(
-                "maps/map" + currentMap + ".txt");
+                "maps/" + currentMap + ".txt", mapside);
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -111,7 +115,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     }
 
 
-    private TileMap loadMap(String filename)
+    private TileMap loadMap(String filename, boolean trigger)
         throws IOException
     {
     	int spawnX = 0;
@@ -178,7 +182,17 @@ public class CatPlanetResourceManager extends ResourceManager {
                     addSprite(newMap, flySprite, x, y);
                 }
                 */
+                //Left-side map respawns
                 else if (ch == '-') {
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                }
+                //Right-side map respawns
+                else if (ch == '_') {
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
@@ -197,43 +211,26 @@ public class CatPlanetResourceManager extends ResourceManager {
                 }
                 //Spikes
                 //Right Wall-spike
-                else if(ch == '{') {
+                else if(ch == 'd') {
                 	addSprite(newMap, rightWallSpike, x,y,'a','a');
                 }
                 //Left Wall-spike
-                else if(ch == '}') {
+                else if(ch == 'a') {
                 	addSprite(newMap, leftWallSpike, x,y,'a','a');
                 }
                 //Ground-spike
-                else if(ch == '^') {
+                else if(ch == 's') {
                 	addSprite(newMap, groundSpike, x,y,'a','a');
                 }
                 //Ceiling Spike
-                else if(ch == 'v') {
+                else if(ch == 'w') {
                 	addSprite(newMap, ceilingSpike, x,y,'a','a');
                 }
-                // Map 1, region 0
-                else if (ch == '1' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
-                }
-                // Map 2, region 0
-                else if (ch == '2' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
-                }
-                /** TODO: Fix Horizontal Exits
-                // Map 2, region 0, horizontal exit
-                else if (ch == '2' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x,y-1,line.charAt(x-1),ch);
-                }
-                // Map 3, region 0, horizontal exit
+                // Map 3, region 0
                 else if (ch == '3' && line.charAt(x-1) == '0'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x,y-1,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
-                **/
             }
         }
 
@@ -340,7 +337,7 @@ public class CatPlanetResourceManager extends ResourceManager {
             loadImage("grub2.png"),
             loadImage("transition.png"),
             loadImage("spikes_down.png"),
-            loadImage("spikes_up.png"),
+            loadImage("spikes_top.png"),
             loadImage("spikes_left.png"),
             loadImage("spikes_right.png"),
         };
@@ -423,18 +420,11 @@ public class CatPlanetResourceManager extends ResourceManager {
             tranAnim[i] = createTranAnim(images[i][11]);
             spikeleftAnim[i] = createSpikeAnim(images[i][14]);
             spikerightAnim[i] = createSpikeAnim(images[i][15]);
-            spikeupAnim[i] = createSpikeAnim(images[i][13]);
-            spikedownAnim[i] = createSpikeAnim(images[i][12]);
+            spikedownAnim[i] = createSpikeAnim(images[i][13]);
+            spikeupAnim[i] = createSpikeAnim(images[i][12]);
             
         }
         catAnim[4] = createCatAnim(images[4]);
-
-        /**
-         *     private Sprite leftWallSpike;
-    private Sprite rightWallSpike;
-    private Sprite ceilingSpike;
-    private Sprite groundSpike;
-         */
         
         // create creature sprites
         playerSprite = new Player(playerAnim[1], playerAnim[0],
@@ -445,10 +435,10 @@ public class CatPlanetResourceManager extends ResourceManager {
             grubAnim[2], grubAnim[3]);
         catPlanetCat = new CatPlanetCat(playerAnim[0], playerAnim[1], catAnim[4]);
         transition = new Transition(tranAnim[0]);
-        leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[0],spikeleftAnim[0],spikeleftAnim[0]);
-        rightWallSpike = new Spike(spikerightAnim[0],spikerightAnim[0],spikerightAnim[0],spikerightAnim[0]);
-        ceilingSpike = new Spike(spikeupAnim[0],spikeupAnim[0],spikeupAnim[0],spikeupAnim[0]);
-        groundSpike = new Spike(spikedownAnim[0],spikedownAnim[0],spikedownAnim[0],spikedownAnim[0]);
+        leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[1],spikeleftAnim[2],spikeleftAnim[3]);
+        rightWallSpike = new Spike(spikerightAnim[0],spikerightAnim[1],spikerightAnim[2],spikerightAnim[3]);
+        ceilingSpike = new Spike(spikeupAnim[0],spikeupAnim[1],spikeupAnim[2],spikeupAnim[3]);
+        groundSpike = new Spike(spikedownAnim[0],spikedownAnim[1],spikedownAnim[2],spikedownAnim[3]);
         
     }
 
@@ -500,9 +490,9 @@ public class CatPlanetResourceManager extends ResourceManager {
     	return anim;
     }
     
-    private Animation createSpikeAnim(Image img){
+    private Animation createSpikeAnim(Image img1){
     	Animation anim = new Animation();
-    	anim.addFrame(img, 250);
+    	anim.addFrame(img1, 250);
     	return anim;
     }
 

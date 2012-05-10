@@ -370,10 +370,10 @@ public class MainGameState implements GameState {
         if (collisionSprite instanceof PowerUp) {
             acquirePowerUp((PowerUp)collisionSprite);
         }
+        else if (collisionSprite instanceof Spike) {
+        	player.setState(Creature.STATE_DYING);
+        }
         else if (collisionSprite instanceof Creature) {
-        	//if(collisionSprite instanceof Spike){
-        		//player.setState(Creature.STATE_DYING);
-        	//}else{
             Creature badguy = (Creature)collisionSprite;
             if (canKill) {
                 // kill the badguy and make player bounce
@@ -385,7 +385,6 @@ public class MainGameState implements GameState {
             else {
                 // player dies!
                 player.setState(Creature.STATE_DYING);
-            //}
         	}
         }
         else if (collisionSprite instanceof Cat) {

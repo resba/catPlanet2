@@ -16,7 +16,7 @@ import com.resba.catplanet.util.TimeSmoothie;
 */
 public class GameManager extends GameCore {
 
-    static final Logger log = Logger.getLogger("com.brackeen.javagamebook.tilegame");
+    static final Logger log = Logger.getLogger("com.resba.catplanet.tilegame");
 
     public static void main(String[] args) {
         new GameManager().run();
@@ -60,7 +60,7 @@ public class GameManager extends GameCore {
 
         log.info("init game states");
         gameStateManager = new GameStateManager(inputManager,
-            resourceManager.loadImage("loadingsplash.png"));
+            resourceManager.loadImage("splash.png"));
         gameStateManager.addState(new MainGameState(
             soundManager, midiPlayer,
             screen.getWidth(), screen.getHeight()));
