@@ -131,19 +131,43 @@ public class MainGameState implements GameState {
             stateChange = GameStateManager.EXIT_GAME;
             return;
         }
-
         Player player = (Player)map.getPlayer();
         if (player.isAlive()) {
-            float velocityX = 0;
+        	float velocityX = player.getVelocityX();
+        	if(jump.isPressed()){
+                player.jump(true);
+            }
+        	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
-                velocityX-=player.getMaxSpeed();
+            	
+            	velocityX += (-0.008f);
+            	
             }
             if (moveRight.isPressed()) {
-                velocityX+=player.getMaxSpeed();
+            
+            	velocityX -= (-0.008f);
+            	
             }
-            if (jump.isPressed()) {
-                player.jump(false);
+            if (moveLeft.isPressed() && moveRight.isPressed()){
+        			velocityX = 0;
             }
+    		if(velocityX > player.getMaxSpeed()){
+    			velocityX = player.getMaxSpeed();
+    		}
+    		if(velocityX < -(player.getMaxSpeed())){
+    			velocityX = -(player.getMaxSpeed());
+    		}
+        }else{
+        	if(velocityX < 0){
+        		velocityX -= (-0.001f);
+        	}
+        	if(velocityX > 0){
+        		velocityX += (-0.001f);
+        	}
+        	if(velocityX == 0){
+        		velocityX = 0;
+        	}
+        }
             player.setVelocityX(velocityX);
         }
 
