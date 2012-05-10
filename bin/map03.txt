@@ -6,6 +6,6 @@ AD                                           I             o o   CAAAAAAAAAAAAAH
 AD                        !                               IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
 AD                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
 AD         III                          1    1  1                CAAAAAAAAAAAAAAAD  o o o o o CA
-AD                                   IIIIIIIIIIIII              03AAAAAAAAAAAAAAAHF  o o o o  CA
-AD              EBBBBBBBBBBBBBBBF     o o o o o o                0AAAAAAAAAAAAAAAAD o o o o o CA
-AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBB01BBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA
+A02                                  IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
+A0              EBBBBBBBBBBBBBBBF     o o o o o o                CAAAAAAAAAAAAAAAAD o o o o o CA
+AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA

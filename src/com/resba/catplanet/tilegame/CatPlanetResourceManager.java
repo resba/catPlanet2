@@ -192,6 +192,21 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
+                // Map 2, region 0
+                else if (ch == '2' && line.charAt(x-1) == '0'){                
+                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                }
+                // Map 2, region 0, horizontal exit
+                else if (ch == '2' && line.charAt(x-1) == '0'){                
+                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x,y+1,line.charAt(x-1),ch);
+                }
+                // Map 3, region 0, horizontal exit
+                else if (ch == '3' && line.charAt(x-1) == '0'){                
+                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x,y+1,line.charAt(x-1),ch);
+                }
             }
         }
 
