@@ -18,7 +18,7 @@ public class MainGameState implements GameState {
 
     private static final int DRUM_TRACK = 1;
 
-    public static final float GRAVITY = 0.002f;
+    public static final float GRAVITY = 0.001f;
 
 
     private SoundManager soundManager;

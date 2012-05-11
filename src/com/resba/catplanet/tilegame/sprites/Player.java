@@ -7,7 +7,7 @@ import com.resba.catplanet.graphics.Animation;
 */
 public class Player extends Creature {
 
-    private static final float JUMP_SPEED = -.55f;
+    private static final float JUMP_SPEED = -.30f;
 
     private boolean onGround;
 
@@ -19,7 +19,11 @@ public class Player extends Creature {
 
 
     public void collideHorizontal() {
-        setVelocityX(0);
+    	if (getVelocityX() > 0){
+            setVelocityX(-(getVelocityX())-(-0.1f));
+        }else{
+        	setVelocityX(-(getVelocityX())+(-0.1f));
+    	}
     }
 
 
@@ -27,8 +31,11 @@ public class Player extends Creature {
         // check if collided with ground
         if (getVelocityY() > 0) {
             onGround = true;
+            setVelocityY(-(getVelocityY())-(-0.20f));
+        }else{
+        	setVelocityY(-(getVelocityY())+(-0.20f));
         }
-        setVelocityY(0);
+        
     }
 
 

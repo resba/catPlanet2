@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.resba.catplanet.graphics.*;
 import com.resba.catplanet.sound.MidiPlayer;
@@ -40,6 +41,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Sprite rightWallSpike;
     private Sprite ceilingSpike;
     private Sprite groundSpike;
+    private Sprite groundFoliage;
     public int CATS = 0;
     private boolean mapside;
 
@@ -200,6 +202,10 @@ public class CatPlanetResourceManager extends ResourceManager {
                     // add it to the map
                     newMap.setPlayer(player);
                 }
+                else if(ch == 'b') {
+                	addSprite(newMap, groundFoliage, x, y, 'a', 'a');
+                }
+                
                 //else if (ch == 'x') {
                 	/**TODO: Respawn**/
                 	//addSprite(newMap, playerSpawn, x, y,'r',Integer.toString(respawn).charAt(0)); //I'm a hackish little devil I am.
@@ -362,6 +368,7 @@ public class CatPlanetResourceManager extends ResourceManager {
             loadImage("spikes_top.png"),
             loadImage("spikes_left.png"),
             loadImage("spikes_right.png"),
+            loadImage("foliage_grass.png"),
         };
 
         images[1] = new Image[images[0].length];
@@ -431,6 +438,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         Animation[] spikerightAnim = new Animation[5];
         Animation[] spikeupAnim = new Animation[5];
         Animation[] spikedownAnim = new Animation[5];
+        Animation[] foliageAnim = new Animation[5];
         for (int i=0; i<4; i++) {
             playerAnim[i] = createPlayerAnim(
                 images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
@@ -444,7 +452,7 @@ public class CatPlanetResourceManager extends ResourceManager {
             spikerightAnim[i] = createSpikeAnim(images[i][15]);
             spikedownAnim[i] = createSpikeAnim(images[i][13]);
             spikeupAnim[i] = createSpikeAnim(images[i][12]);
-            
+            foliageAnim[0] = createGroundFoliage(images[0][16]);
         }
         catAnim[4] = createCatAnim(images[4]);
         
@@ -461,6 +469,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         rightWallSpike = new Spike(spikerightAnim[0],spikerightAnim[1],spikerightAnim[2],spikerightAnim[3]);
         ceilingSpike = new Spike(spikeupAnim[0],spikeupAnim[1],spikeupAnim[2],spikeupAnim[3]);
         groundSpike = new Spike(spikedownAnim[0],spikedownAnim[1],spikedownAnim[2],spikedownAnim[3]);
+        groundFoliage = new Background(foliageAnim[0]);
         
     }
 
@@ -515,6 +524,11 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Animation createSpikeAnim(Image img1){
     	Animation anim = new Animation();
     	anim.addFrame(img1, 250);
+    	return anim;
+    }
+    private Animation createGroundFoliage(Image image){
+    	Animation anim = new Animation();
+    	anim.addFrame(image, 100);
     	return anim;
     }
 
