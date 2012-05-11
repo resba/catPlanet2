@@ -17,5 +17,7 @@ public class CatPlanetCat extends Cat {
     public float getMaxSpeed() {
         return 0;
     }
+    
+
 
 }

@@ -20,13 +20,13 @@ public abstract class Cat extends Sprite {
     public static final int STATE_DYING = 1;
     public static final int STATE_DEAD = 2;
     public static final int STATE_RAVE = 3;
-
+    private boolean rave;
     private Animation left;
     private Animation right;
     private Animation deadLeft;
     private Animation deadRight;
     private Animation rotate;
-    private int state;
+    protected int state;
     private long stateTime;
 
     /**
@@ -40,6 +40,7 @@ public abstract class Cat extends Sprite {
         this.right = right;
         this.rotate = rotate;
         state = STATE_NORMAL;
+        rave = false;
     }
 
 
@@ -108,8 +109,22 @@ public abstract class Cat extends Sprite {
     /**
         Checks if this creature is alive.
     */
+    public void setRave(boolean t){
+    	if (t){
+    		rave = t;
+    		this.setState(STATE_RAVE);
+    	}
+    	if(!t){
+    		rave = t;
+    		this.setState(STATE_NORMAL);
+    	}
+    }
     public boolean isAlive() {
-        return (state == STATE_NORMAL);
+    	if(rave){
+    		return (state == STATE_RAVE);
+    	}else{
+    		return (state == STATE_NORMAL);
+    	}
     }
 
 

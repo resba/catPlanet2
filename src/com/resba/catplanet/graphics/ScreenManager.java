@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 
+import com.resba.catplanet.catmonitor.CatMonitor;
+
 /**
     The ScreenManager class manages initializing and displaying
     full screen graphics modes.
@@ -13,6 +15,7 @@ import javax.swing.JFrame;
 public class ScreenManager {
 
     private GraphicsDevice device;
+    
 
     /**
         Creates a new ScreenManager object.
@@ -112,15 +115,18 @@ public class ScreenManager {
     public void setFullScreen(DisplayMode displayMode) {
         final JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setUndecorated(true);
+        frame.setUndecorated(false);
         frame.setIgnoreRepaint(true);
         frame.setResizable(false);
-        
+        frame.setTitle("cat planet duex");
+        frame.setLocation(displayMode.getHeight()/3,displayMode.getWidth()/2);
+        frame.add(new CatMonitor()); 
         device.setFullScreenWindow(frame);
-
+        
         if (displayMode != null &&
             device.isDisplayChangeSupported())
         {
+        	/**
             try {
                 device.setDisplayMode(displayMode);
             }
@@ -128,7 +134,13 @@ public class ScreenManager {
             // fix for mac os x
             frame.setSize(displayMode.getWidth(),
                 displayMode.getHeight());
+        	*/
+        	
+        	frame.setSize(800,600);
+        	
         }
+        
+        
         // avoid potential deadlock in 1.4.1_02
         try {
             EventQueue.invokeAndWait(new Runnable() {

@@ -226,12 +226,12 @@ public class CatPlanetResourceManager extends ResourceManager {
                 else if(ch == 'w') {
                 	addSprite(newMap, ceilingSpike, x,y,'a','a');
                 }
-                // Map 3, region 0
+                // Map 1, region 0
                 else if (ch == '1' && line.charAt(x-1) == '0'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
-                // Map 3, region 0
+                // Map 2, region 0
                 else if (ch == '2' && line.charAt(x-1) == '0'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
@@ -241,8 +241,13 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
-                // Map 3, region 0
+                // Map 4, region 0
                 else if (ch == '4' && line.charAt(x-1) == '0'){                
+                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
+                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                }
+                // Map 0, region 1
+                else if (ch == '1' && line.charAt(x-1) == '1'){                
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
@@ -267,6 +272,8 @@ public class CatPlanetResourceManager extends ResourceManager {
         		sprite = (Transition)hostSprite.clone();
         		sprite.setMap(mapI);
         		sprite.setRegion(region);
+        	}else if(hostSprite instanceof Cat){
+        		sprite = (Cat)hostSprite.clone();
         	}else{
         		sprite = (Sprite)hostSprite.clone();
         	}
@@ -500,7 +507,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private Animation createCatAnim(Image[] images){
     	Animation anim = new Animation();
     	for(int i = 0; images.length != i; i++){
-    		anim.addFrame(images[i],100);
+    		anim.addFrame(images[i],50);
     	}
     	return anim;
     }

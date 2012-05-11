@@ -79,7 +79,7 @@ public class MainGameState implements GameState {
         resourceManager.loadResources();
 
         renderer.setBackground(
-            resourceManager.loadImage("background.png"));
+            resourceManager.loadImage("background0.png"));
 
         // load first map
         map = resourceManager.loadFirstMap();
@@ -413,11 +413,13 @@ public class MainGameState implements GameState {
         }
         else if (collisionSprite instanceof Cat) {
             Cat cuddlycat = (Cat)collisionSprite;
+            	cuddlycat.setRave(true);
                 cuddlycat.setState(Cat.STATE_RAVE);
                 //map.findTexts(cuddlycat.getID()).setVisible(true);
         }
         else if (collisionSprite instanceof Transition) {
         	Transition t = (Transition)collisionSprite;
+        	setBackground("background"+t.getRegion()+".png");
         	map = resourceManager.selectMap(t.getRegion(), t.getMap());
         }
     }
