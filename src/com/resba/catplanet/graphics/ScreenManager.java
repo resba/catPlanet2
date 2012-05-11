@@ -136,7 +136,8 @@ public class ScreenManager {
                 displayMode.getHeight());
         	*/
         	
-        	frame.setSize(800,600);
+        	frame.setSize(displayMode.getWidth(),
+                    displayMode.getHeight());
         	
         }
         

@@ -140,16 +140,16 @@ public class MainGameState implements GameState {
         	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
             	
-            	velocityX += (-0.008f);
+            	velocityX += (-0.05f);
             	
             }
             if (moveRight.isPressed()) {
             
-            	velocityX -= (-0.008f);
+            	velocityX -= (-0.05f);
             	
             }
             if (moveLeft.isPressed() && moveRight.isPressed()){
-        			velocityX = 0;
+        			//velocityX = 0;
             }
     		if(velocityX > player.getMaxSpeed()){
     			velocityX = player.getMaxSpeed();
