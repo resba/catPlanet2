@@ -15,7 +15,7 @@ import com.resba.catplanet.catmonitor.CatMonitor;
 public class ScreenManager {
 
     private GraphicsDevice device;
-    private JFrame j;
+    public JFrame j;
     
 
     /**
