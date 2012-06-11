@@ -6,7 +6,7 @@
 <!-- Ant 1.5 build file                                                    -->
 <!-- ===================================================================== -->
 
-<project name="chap18 - Last 10% (JNLP)" default="build" basedir=".">
+<project name="Cat Planet 2" default="build" basedir=".">
 
     <property name="srcdir" value="src"/>
     <property name="destdir" value="build"/>

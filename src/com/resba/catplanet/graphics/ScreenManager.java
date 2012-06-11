@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import com.resba.catplanet.catmonitor.CatMonitor;
 
@@ -15,6 +15,7 @@ import com.resba.catplanet.catmonitor.CatMonitor;
 public class ScreenManager {
 
     private GraphicsDevice device;
+    private JFrame j;
     
 
     /**
@@ -23,7 +24,7 @@ public class ScreenManager {
     public ScreenManager() {
         GraphicsEnvironment environment =
             GraphicsEnvironment.getLocalGraphicsEnvironment();
-        device = environment.getDefaultScreenDevice();
+        j = new JFrame();
     }
 
 
@@ -54,14 +55,6 @@ public class ScreenManager {
         }
 
         return null;
-    }
-
-
-    /**
-        Returns the current display mode.
-    */
-    public DisplayMode getCurrentDisplayMode() {
-        return device.getDisplayMode();
     }
 
 
@@ -105,63 +98,6 @@ public class ScreenManager {
 
 
     /**
-        Enters full screen mode and changes the display mode.
-        If the specified display mode is null or not compatible
-        with this device, or if the display mode cannot be
-        changed on this system, the current display mode is used.
-        <p>
-        The display uses a BufferStrategy with 2 buffers.
-    */
-    public void setFullScreen(DisplayMode displayMode) {
-        final JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setUndecorated(false);
-        frame.setIgnoreRepaint(true);
-        frame.setResizable(false);
-        frame.setTitle("cat planet duex");
-        frame.setLocation(displayMode.getHeight()/3,displayMode.getWidth()/2);
-        frame.add(new CatMonitor()); 
-        device.setFullScreenWindow(frame);
-        
-        if (displayMode != null &&
-            device.isDisplayChangeSupported())
-        {
-        	/**
-            try {
-                device.setDisplayMode(displayMode);
-            }
-            catch (IllegalArgumentException ex) { }
-            // fix for mac os x
-            frame.setSize(displayMode.getWidth(),
-                displayMode.getHeight());
-        	*/
-        	
-        	frame.setSize(displayMode.getWidth(),
-                    displayMode.getHeight());
-        	
-        }
-        
-        
-        // avoid potential deadlock in 1.4.1_02
-        try {
-            EventQueue.invokeAndWait(new Runnable() {
-                public void run() {
-                    frame.createBufferStrategy(2);
-                }
-            });
-        }
-        catch (InterruptedException ex) {
-            // ignore
-        }
-        catch (InvocationTargetException  ex) {
-            // ignore
-        }
-
-
-    }
-
-
-    /**
         Gets the graphics context for the display. The
         ScreenManager uses double buffering, so applications must
         call update() to show any graphics drawn.
@@ -169,7 +105,7 @@ public class ScreenManager {
         The application must dispose of the graphics object.
     */
     public Graphics2D getGraphics() {
-        Window window = device.getFullScreenWindow();
+        Window window = j;
         if (window != null) {
             BufferStrategy strategy = window.getBufferStrategy();
             return (Graphics2D)strategy.getDrawGraphics();
@@ -184,16 +120,17 @@ public class ScreenManager {
         Updates the display.
     */
     public void update() {
-        Window window = device.getFullScreenWindow();
+        //System.out.println("Update in Screen Manager Called.");
+
+        // Sync the display on some systems.
+        // (on Linux, this fixes event queue problems)
+        Window window = j;
         if (window != null) {
             BufferStrategy strategy = window.getBufferStrategy();
             if (!strategy.contentsLost()) {
                 strategy.show();
             }
         }
-        // Sync the display on some systems.
-        // (on Linux, this fixes event queue problems)
-        //Toolkit.getDefaultToolkit().sync();
     }
 
 
@@ -202,9 +139,30 @@ public class ScreenManager {
         Returns null if the device is not in full screen mode.
     */
     public JFrame getFullScreenWindow() {
-        return (JFrame)device.getFullScreenWindow();
+        j.pack();
+        j.setVisible(true);
+        j.setSize(800, 600);
+        return j;
     }
 
+    public void setupBuffering(){
+        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        j.setIgnoreRepaint(true);
+        j.setResizable(false);
+        try {
+            EventQueue.invokeAndWait(new Runnable() {
+                public void run() {
+                    j.createBufferStrategy(2);
+                }
+            });
+        }
+        catch (InterruptedException ex) {
+            // ignore
+        }
+        catch (InvocationTargetException  ex) {
+            // ignore
+        }
+    }
 
     /**
         Returns the width of the window currently used in full
@@ -212,12 +170,12 @@ public class ScreenManager {
         screen mode.
     */
     public int getWidth() {
-        Window window = device.getFullScreenWindow();
+        Window window = j;
         if (window != null) {
             return window.getWidth();
         }
         else {
-            return 0;
+            return 800;
         }
     }
 
@@ -228,12 +186,12 @@ public class ScreenManager {
         screen mode.
     */
     public int getHeight() {
-        Window window = device.getFullScreenWindow();
+        Window window = j;
         if (window != null) {
             return window.getHeight();
         }
         else {
-            return 0;
+            return 800;
         }
     }
 
@@ -242,11 +200,11 @@ public class ScreenManager {
         Restores the screen's display mode.
     */
     public void restoreScreen() {
-        Window window = device.getFullScreenWindow();
+        Window window = j;
         if (window != null) {
             window.dispose();
         }
-        device.setFullScreenWindow(null);
+        window.setSize(800, 800);
     }
 
 
@@ -256,7 +214,7 @@ public class ScreenManager {
     public BufferedImage createCompatibleImage(int w, int h,
         int transparancy)
     {
-        Window window = device.getFullScreenWindow();
+        Window window = j;
         if (window != null) {
             GraphicsConfiguration gc =
                 window.getGraphicsConfiguration();
