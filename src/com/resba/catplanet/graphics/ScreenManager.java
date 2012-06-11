@@ -15,7 +15,9 @@ import com.resba.catplanet.catmonitor.CatMonitor;
 public class ScreenManager {
 
     private GraphicsDevice device;
-    public JFrame j;
+    private JFrame j;
+    private JFrame stat;
+    private JPanel holder;
     
 
     /**
@@ -25,6 +27,8 @@ public class ScreenManager {
         GraphicsEnvironment environment =
             GraphicsEnvironment.getLocalGraphicsEnvironment();
         j = new JFrame();
+        stat = new JFrame();
+        holder = new JPanel();
     }
 
 
@@ -132,6 +136,19 @@ public class ScreenManager {
             }
         }
     }
+    public void initStatScreen(){
+        stat.setTitle("CatScreen (tm)");
+        stat.setLocation(0, 600);
+        stat.setSize(800,100);
+        stat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        holder.setBackground(Color.black);
+        holder.setLayout(new GridLayout(0,2,0,0));
+        holder.setPreferredSize(new Dimension(800, 100));
+        holder.setSize(800,100);
+        stat.setContentPane(holder);
+        stat.setVisible(true);
+        holder.setVisible(true);
+    }
 
 
     /**
@@ -207,7 +224,9 @@ public class ScreenManager {
         window.setSize(800, 800);
     }
 
-
+    public void setTitle(String title){
+        j.setTitle(title);
+    }
     /**
         Creates an image compatible with the current display.
     */

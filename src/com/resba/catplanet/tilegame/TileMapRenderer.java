@@ -1,7 +1,9 @@
 package com.resba.catplanet.tilegame;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import com.resba.catplanet.graphics.Sprite;
 import com.resba.catplanet.tilegame.sprites.Creature;
@@ -28,7 +30,18 @@ public class TileMapRenderer {
     private static final int TILE_SIZE_BITS = 5;
 
     private Image background;
-
+    private String label;
+    private float ex;
+    private float ey;
+    private boolean flip;
+    private ArrayList<String> s;
+    private ArrayList<String> xn;
+    private ArrayList<String> yn;
+    public TileMapRenderer(){
+        s = new ArrayList<String>();
+        xn = new ArrayList<String>();
+        yn = new ArrayList<String>();
+    }
     /**
         Converts a pixel position to a tile position.
     */
@@ -71,6 +84,17 @@ public class TileMapRenderer {
         this.background = background;
     }
 
+    public void flip(boolean b){
+       this.flip = b;
+    }
+    public void addText(String label, float nx, float ny){
+         s.add(label);
+         String ix = ""+nx;
+         String iy = ""+ny;
+         xn.add(ix);
+         yn.add(iy);
+
+    }
 
     /**
         Draws the specified TileMap.
@@ -78,6 +102,7 @@ public class TileMapRenderer {
     public void draw(Graphics2D g, TileMap map,
         int screenWidth, int screenHeight)
     {
+        System.out.println("Called Draw");
         Sprite player = map.getPlayer();
         int mapWidth = tilesToPixels(map.getWidth());
 
@@ -139,14 +164,24 @@ public class TileMapRenderer {
             int x = Math.round(sprite.getX()) + offsetX;
             int y = Math.round(sprite.getY()) + offsetY;
             g.drawImage(sprite.getImage(), x, y, null);
-
+        System.out.println("I got here.");
             // wake up the creature when it's on screen
             if (sprite instanceof Creature &&
                 x >= 0 && x < screenWidth)
             {
+                System.out.println("Now I'm here.");
                 ((Creature)sprite).wakeUp();
             }
+         System.out.println(i.hashCode());
         }
+        g.setColor(Color.black);
+        if(s.size() > 0){
+            for(int in = 0; s.size() > in; in++){
+                System.out.println("Beep.");
+                g.drawString(s.get(in),Float.parseFloat(xn.get(in)),Float.parseFloat(yn.get(in)));
+            }
+        }
+        System.out.println("BEEEEEEEEP.");
     }
 
 }

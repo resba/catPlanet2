@@ -28,6 +28,8 @@ public abstract class Cat extends Sprite {
     private Animation rotate;
     protected int state;
     private long stateTime;
+    private ScreenManager s;
+    private boolean collision;
 
     /**
         Creates a new Creature with the specified Animations.
@@ -41,6 +43,7 @@ public abstract class Cat extends Sprite {
         this.rotate = rotate;
         state = STATE_NORMAL;
         rave = false;
+        collision = false;
     }
 
 
@@ -189,6 +192,11 @@ public abstract class Cat extends Sprite {
         if (state == STATE_DYING && stateTime >= DIE_TIME) {
             setState(STATE_DEAD);
         }
+    }
+    public void showText(String text){
+    }
+    public void toggleCollision(boolean b){
+        this.collision = b;
     }
 
 }

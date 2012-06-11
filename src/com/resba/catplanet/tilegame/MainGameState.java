@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.Iterator;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
+import javax.swing.*;
 
 
 import com.resba.catplanet.graphics.*;
@@ -35,6 +36,7 @@ public class MainGameState implements GameState {
     private TileMapRenderer renderer;
 
     private String stateChange;
+    private Graphics2D g;
 
     private GameAction moveLeft;
     private GameAction moveRight;
@@ -415,7 +417,7 @@ public class MainGameState implements GameState {
             Cat cuddlycat = (Cat)collisionSprite;
             	cuddlycat.setRave(true);
                 cuddlycat.setState(Cat.STATE_RAVE);
-                //map.findTexts(cuddlycat.getID()).setVisible(true);
+                renderer.addText("Yahoo!",cuddlycat.getX(),cuddlycat.getY()+10);
         }
         else if (collisionSprite instanceof Transition) {
         	Transition t = (Transition)collisionSprite;

@@ -280,6 +280,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         		sprite.setRegion(region);
         	}else if(hostSprite instanceof Cat){
         		sprite = (Cat)hostSprite.clone();
+
         	}else{
         		sprite = (Sprite)hostSprite.clone();
         	}
