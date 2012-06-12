@@ -19,7 +19,7 @@ public class MainGameState implements GameState {
 
     private static final int DRUM_TRACK = 1;
 
-    public static final float GRAVITY = 0.009f;
+    public static final float GRAVITY = 0.0006f;
 
 
     private SoundManager soundManager;
@@ -145,12 +145,12 @@ public class MainGameState implements GameState {
         	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
             	
-            	velocityX += (-0.0004f);
+            	velocityX += (-0.0009f);
             	
             }
             if (moveRight.isPressed()) {
             
-            	velocityX -= (-0.0004f);
+            	velocityX -= (-0.0009f);
             	
             }
             if (moveLeft.isPressed() && moveRight.isPressed()){

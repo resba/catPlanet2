@@ -6,9 +6,9 @@
 #   o       Star
 #   *       Goal
                                   
-BF   03     o o o                o o o o o o o o o o o o o o o o o o o o o o o                EB
-AD         IIIIIII              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
-AD                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
+BF   03                          o o o o o o o o o o o o o o o o o o o o o o o                EB
+AD                              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
+AD                                           I                   EBBBBBBBBBBBBBF     o o o o  CA
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
@@ -16,11 +16,11 @@ ADd                                          I                   CAAAAAAAAAAAAAD
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
 ADd                                          I                   CAAAAAAAAAAAAAD    o o o o o CA
-ADd                ww  IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
+ADd                ww                        I                   CAAAAAAAAAAAAAD    o o o o o CA
 ADd                ss                        I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
-AD                        !                               IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
-AD   -                  IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
-AD         III           sss                                     CAAAAAAAAAAAAAAAD  o o o o o CA
+AD                                                        IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
+AD   -                                                           CAAAAAAAAAAAAAAHF   IIIIIII  CA
+AD                       sss                                     CAAAAAAAAAAAAAAAD  o o o o o CA
 AD              c            c     aIIIIIIIIIIIII                CAAAAAAAAAAAAAAAHF  o o o o  CA
 AD              EBBwwwwwBBBBBBBBF     o o o o o o                CAAAAAAAAAAAAAAAAD o o o o o CA
 AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA

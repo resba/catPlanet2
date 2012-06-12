@@ -7,7 +7,7 @@ import com.resba.catplanet.graphics.Animation;
 */
 public class Player extends Creature {
 
-    private static final float JUMP_SPEED = -1.5f;
+    private static final float JUMP_SPEED = -.30f;
 
     private boolean onGround;
 

@@ -6,14 +6,14 @@
 #   o       Star
 #   *       Goal
                                   
-BF   03     o o o                o o o o o o o o o o o o o o o o o o o o o o o                EB
-AD   -     IIIIIII              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
+BF   03                          o o o o o o o o o o o o o o o o o o o o o o o                EB
+AD   -                          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
 AD                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
 AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
 AD                                           I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
 AD                        !                               IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
 AD                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
-AD         III                                                   CAAAAAAAAAAAAAAAD  o o o o o CA
+AD                                                               CAAAAAAAAAAAAAAAD  o o o o o CA
 AD                                   IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
 AD              EBBBBBBBBBBBBBBBF     o o o o o o           *    CAAAAAAAAAAAAAAAAD o o o o o CA
 AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBB03BBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA
