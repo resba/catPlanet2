@@ -4,7 +4,6 @@
 #   (Space) Empty tile
 #   A..Z    Tiles A thr ugh Z
 #           Star
-#   !       Music N te
 #   *       Goal
 BF                                                                                            EB
 AD   -     BBBBBBB              BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB               CA

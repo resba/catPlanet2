@@ -4,7 +4,6 @@ import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.resba.catplanet.graphics.*;
 import com.resba.catplanet.sound.MidiPlayer;
@@ -29,11 +28,8 @@ public class CatPlanetResourceManager extends ResourceManager {
 
     // host sprites used for cloning
     private Sprite playerSprite;
-    private Sprite musicSprite;
     private Sprite coinSprite;
     private Sprite goalSprite;
-    private Sprite grubSprite;
-    private Sprite flySprite;
     private Sprite playerSpawn;
     private Sprite catPlanetCat;
     private Transition transition;
@@ -170,20 +166,9 @@ public class CatPlanetResourceManager extends ResourceManager {
                 else if (ch == 'o') {
                     addSprite(newMap, coinSprite, x, y,'a','a');
                 }
-                else if (ch == '!') {
-                    addSprite(newMap, musicSprite, x, y,'a','a');
-                }
                 else if (ch == '*') {
                     addSprite(newMap, goalSprite, x, y,'a','a');
                 }
-                /*
-                else if (ch == '1') {
-                    addSprite(newMap, grubSprite, x, y);
-                }
-                else if (ch == '2') {
-                    addSprite(newMap, flySprite, x, y);
-                }
-                */
                 //Left-side map respawns
                 else if (ch == '-') {
                 	Sprite player = (Sprite)playerSprite.clone();
@@ -359,11 +344,6 @@ public class CatPlanetResourceManager extends ResourceManager {
             loadImage("cat_4.png"),
             loadImage("cat_5.png"),
             loadImage("cat_6.png"),
-            loadImage("fly1.png"),
-            loadImage("fly2.png"),
-            loadImage("fly3.png"),
-            loadImage("grub1.png"),
-            loadImage("grub2.png"),
             loadImage("transition.png"),
             loadImage("spikes_down.png"),
             loadImage("spikes_top.png"),
@@ -431,8 +411,6 @@ public class CatPlanetResourceManager extends ResourceManager {
 
         // create creature animations
         Animation[] playerAnim = new Animation[5];
-        Animation[] flyAnim = new Animation[5];
-        Animation[] grubAnim = new Animation[5];
         Animation[] catAnim = new Animation[5];
         Animation[] tranAnim = new Animation[5];
         Animation[] spikeleftAnim = new Animation[5];
@@ -443,27 +421,19 @@ public class CatPlanetResourceManager extends ResourceManager {
         for (int i=0; i<4; i++) {
             playerAnim[i] = createPlayerAnim(
                 images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
-            flyAnim[i] = createFlyAnim(
-                images[i][6], images[i][7], images[i][8]);
-            grubAnim[i] = createGrubAnim(
-                images[i][9], images[i][10]);
             
-            tranAnim[i] = createTranAnim(images[i][11]);
-            spikeleftAnim[i] = createSpikeAnim(images[i][14]);
-            spikerightAnim[i] = createSpikeAnim(images[i][15]);
-            spikedownAnim[i] = createSpikeAnim(images[i][13]);
-            spikeupAnim[i] = createSpikeAnim(images[i][12]);
-            foliageAnim[0] = createGroundFoliage(images[0][16]);
+            tranAnim[i] = createTranAnim(images[i][6]);
+            spikeleftAnim[i] = createSpikeAnim(images[i][9]);
+            spikerightAnim[i] = createSpikeAnim(images[i][10]);
+            spikedownAnim[i] = createSpikeAnim(images[i][8]);
+            spikeupAnim[i] = createSpikeAnim(images[i][7]);
+            foliageAnim[0] = createGroundFoliage(images[0][11]);
         }
         catAnim[4] = createCatAnim(images[4]);
         
         // create creature sprites
         playerSprite = new Player(playerAnim[1], playerAnim[0],
             playerAnim[2], playerAnim[3]);
-        flySprite = new Fly(flyAnim[0], flyAnim[1],
-            flyAnim[2], flyAnim[3]);
-        grubSprite = new Grub(grubAnim[0], grubAnim[1],
-            grubAnim[2], grubAnim[3]);
         catPlanetCat = new CatPlanetCat(playerAnim[0], playerAnim[1], catAnim[4]);
         transition = new Transition(tranAnim[0]);
         leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[1],spikeleftAnim[2],spikeleftAnim[3]);
@@ -485,26 +455,6 @@ public class CatPlanetResourceManager extends ResourceManager {
         anim.addFrame(player4, 150);
         anim.addFrame(player5, 150);
         anim.addFrame(player6, 150);
-        return anim;
-    }
-
-
-    private Animation createFlyAnim(Image img1, Image img2,
-        Image img3)
-    {
-        Animation anim = new Animation();
-        anim.addFrame(img1, 50);
-        anim.addFrame(img2, 50);
-        anim.addFrame(img3, 50);
-        anim.addFrame(img2, 50);
-        return anim;
-    }
-
-
-    private Animation createGrubAnim(Image img1, Image img2) {
-        Animation anim = new Animation();
-        anim.addFrame(img1, 250);
-        anim.addFrame(img2, 250);
         return anim;
     }
     
@@ -550,14 +500,6 @@ public class CatPlanetResourceManager extends ResourceManager {
         anim.addFrame(loadImage("star3.png"), 100);
         anim.addFrame(loadImage("star4.png"), 100);
         coinSprite = new PowerUp.Star(anim);
-
-        // create "music" sprite
-        anim = new Animation();
-        anim.addFrame(loadImage("music1.png"), 150);
-        anim.addFrame(loadImage("music2.png"), 150);
-        anim.addFrame(loadImage("music3.png"), 150);
-        anim.addFrame(loadImage("music2.png"), 150);
-        musicSprite = new PowerUp.Music(anim);
     }
 
 }

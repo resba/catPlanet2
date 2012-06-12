@@ -455,11 +455,6 @@ public class MainGameState implements GameState {
             // do something here, like give the player points
             soundManager.play(prizeSound);
         }
-        else if (powerUp instanceof PowerUp.Music) {
-            // change the music
-            soundManager.play(prizeSound);
-            toggleDrumPlayback();
-        }
         else if (powerUp instanceof PowerUp.Goal) {
             // advance to next map
             soundManager.play(prizeSound,

@@ -4,10 +4,7 @@
 #   (Space) Empty tile
 #   A..Z    Tiles A through Z
 #   o       Star
-#   !       Music Note
 #   *       Goal
-#   1       Bad Guy 1 (grub)
-#   2       Bad Guy 2 (fly)
                                   
 BF   03     o o o                o o o o o o o o o o o o o o o o o o o o o o o                EB
 AD   -     IIIIIII              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
