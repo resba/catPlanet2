@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import com.resba.catplanet.graphics.Sprite;
 import com.resba.catplanet.tilegame.sprites.Creature;
+import com.resba.catplanet.util.CatCounter;
 
 /**
     The TileMapRenderer class draws a TileMap on the screen.
@@ -175,12 +176,12 @@ public class TileMapRenderer {
         }
         g.setColor(Color.black);
         g.setBackground(Color.WHITE);
+        g.drawString("cats x"+ CatCounter.getCATS(),tilesToPixels(1),tilesToPixels(2));
         if(s.size() > 0){
             for(int in = 0; s.size() > in; in++){
                         g.drawString(s.get(in),tilesToPixels(Integer.parseInt(xn.get(in)))+offsetX,tilesToPixels(Integer.parseInt(yn.get(in)))+offsetY);
                 }
             }
-
     }
 
 }

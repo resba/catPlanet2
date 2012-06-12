@@ -13,6 +13,7 @@ import com.resba.catplanet.input.*;
 import com.resba.catplanet.sound.*;
 import com.resba.catplanet.state.*;
 import com.resba.catplanet.tilegame.sprites.*;
+import com.resba.catplanet.util.CatCounter;
 import com.resba.catplanet.util.CatLabel;
 
 public class MainGameState implements GameState {
@@ -438,6 +439,7 @@ public class MainGameState implements GameState {
                 cuddlycat.setState(Cat.STATE_RAVE);
                 renderer.addText("Yahoo!",TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
                 renderer.flip(true);
+                CatCounter.addCat();
             }
         }
         else if (collisionSprite instanceof Transition) {
