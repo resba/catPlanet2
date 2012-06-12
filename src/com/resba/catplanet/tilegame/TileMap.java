@@ -114,8 +114,8 @@ public class TileMap {
     */
     public void removeSprite(Sprite sprite) {
         sprites.remove(sprite);
-    }
 
+    }
 
     /**
         Gets an Iterator of all the Sprites in this map,

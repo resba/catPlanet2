@@ -37,10 +37,12 @@ public class TileMapRenderer {
     private ArrayList<String> s;
     private ArrayList<String> xn;
     private ArrayList<String> yn;
+    private long timer;
     public TileMapRenderer(){
         s = new ArrayList<String>();
         xn = new ArrayList<String>();
         yn = new ArrayList<String>();
+        flip = false;
     }
     /**
         Converts a pixel position to a tile position.
@@ -63,14 +65,14 @@ public class TileMapRenderer {
     }
 
 
-    /**
+    /**                             
         Converts a tile position to a pixel position.
     */
     public static int tilesToPixels(int numTiles) {
         // no real reason to use shifting here.
         // it's slighty faster, but doesn't add up to much
         // on modern processors.
-        return numTiles << TILE_SIZE_BITS;
+        return numTiles << TILE_SIZE_BITS;  
 
         // use this if the tile size isn't a power of 2:
         //return numTiles * TILE_SIZE;
@@ -87,25 +89,26 @@ public class TileMapRenderer {
     public void flip(boolean b){
        this.flip = b;
     }
-    public void addText(String label, float nx, float ny){
+    public void addText(String label, int nx, int ny){
          s.add(label);
          String ix = ""+nx;
          String iy = ""+ny;
          xn.add(ix);
          yn.add(iy);
-
     }
-
+    public void removeAllText(){
+        s.removeAll(s);
+        xn.removeAll(xn);
+        yn.removeAll(yn);
+    }
     /**
         Draws the specified TileMap.
     */
     public void draw(Graphics2D g, TileMap map,
         int screenWidth, int screenHeight)
     {
-        System.out.println("Called Draw");
         Sprite player = map.getPlayer();
         int mapWidth = tilesToPixels(map.getWidth());
-
         // get the scrolling position of the map
         // based on player's position
         int offsetX = screenWidth / 2 -
@@ -150,7 +153,6 @@ public class TileMapRenderer {
                 }
             }
         }
-
         // draw player
         g.drawImage(player.getImage(),
             Math.round(player.getX()) + offsetX,
@@ -164,24 +166,21 @@ public class TileMapRenderer {
             int x = Math.round(sprite.getX()) + offsetX;
             int y = Math.round(sprite.getY()) + offsetY;
             g.drawImage(sprite.getImage(), x, y, null);
-        System.out.println("I got here.");
             // wake up the creature when it's on screen
             if (sprite instanceof Creature &&
                 x >= 0 && x < screenWidth)
             {
-                System.out.println("Now I'm here.");
                 ((Creature)sprite).wakeUp();
             }
-         System.out.println(i.hashCode());
         }
         g.setColor(Color.black);
+        g.setBackground(Color.WHITE);
         if(s.size() > 0){
             for(int in = 0; s.size() > in; in++){
-                System.out.println("Beep.");
-                g.drawString(s.get(in),Float.parseFloat(xn.get(in)),Float.parseFloat(yn.get(in)));
+                        g.drawString(s.get(in),tilesToPixels(Integer.parseInt(xn.get(in)))+offsetX,tilesToPixels(Integer.parseInt(yn.get(in)))+offsetY);
+                }
             }
-        }
-        System.out.println("BEEEEEEEEP.");
+
     }
 
 }

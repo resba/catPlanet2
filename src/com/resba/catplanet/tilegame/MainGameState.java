@@ -42,6 +42,9 @@ public class MainGameState implements GameState {
     private GameAction moveRight;
     private GameAction jump;
     private GameAction exit;
+    private long timer;
+
+    private float playerVX;
 
     public MainGameState(SoundManager soundManager,
         MidiPlayer midiPlayer, int width, int height)
@@ -142,12 +145,12 @@ public class MainGameState implements GameState {
         	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
             	
-            	velocityX += (-0.05f);
+            	velocityX += (-0.005f);
             	
             }
             if (moveRight.isPressed()) {
             
-            	velocityX -= (-0.05f);
+            	velocityX -= (-0.005f);
             	
             }
             if (moveLeft.isPressed() && moveRight.isPressed()){
@@ -161,20 +164,28 @@ public class MainGameState implements GameState {
     		}
         }else{
         	if(velocityX < 0){
-        		//velocityX -= (-0.001f);
+        		//velocityX -= (-0.0001f);
         	}
         	if(velocityX > 0){
-        		//velocityX += (-0.001f);
+        		//velocityX += (-0.0001f);
         	}
         	if(velocityX == 0){
         		velocityX = 0;
         	}
         }
+
             player.setVelocityX(velocityX);
         }
 
     }
 
+    private void notePlayerX(float x){
+         this.playerVX = x;
+    }
+
+    public float getPlayerNotedX(){
+         return playerVX;
+    }
 
     /**
         Gets the tile that a Sprites collides with. Only the
@@ -280,6 +291,7 @@ public class MainGameState implements GameState {
         // player is dead! start map over
         if (player.getState() == Creature.STATE_DEAD) {
         	/** TODO **/
+            renderer.removeAllText();
             map = resourceManager.reloadMap();
             return;
         }
@@ -415,13 +427,17 @@ public class MainGameState implements GameState {
         }
         else if (collisionSprite instanceof Cat) {
             Cat cuddlycat = (Cat)collisionSprite;
+            if(!cuddlycat.isRave()){
             	cuddlycat.setRave(true);
                 cuddlycat.setState(Cat.STATE_RAVE);
-                renderer.addText("Yahoo!",cuddlycat.getX(),cuddlycat.getY()+10);
+                renderer.addText("Yahoo!",TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
+                renderer.flip(true);
+            }
         }
         else if (collisionSprite instanceof Transition) {
         	Transition t = (Transition)collisionSprite;
         	setBackground("background"+t.getRegion()+".png");
+            renderer.removeAllText();
         	map = resourceManager.selectMap(t.getRegion(), t.getMap());
         }
     }

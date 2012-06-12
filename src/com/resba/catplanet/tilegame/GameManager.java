@@ -72,7 +72,7 @@ public class GameManager extends GameCore {
             public void run() {
                 log.info("loading resources");
                 gameStateManager.loadAllResources(resourceManager);
-                log.info("setting to Splash state");
+                log.info("done loading resources. splash has been notified.");
                 gameStateManager.setState("Splash");
             }
         }.start();
@@ -100,7 +100,6 @@ public class GameManager extends GameCore {
             gameStateManager.update(elapsedTime);
         }
     }
-
 
     public void draw(Graphics2D g) {
         gameStateManager.draw(g);

@@ -1,28 +1,26 @@
-# Map file for tile-based game
-# (Lines that start with '#' are comments)
+# Map file f r tile-based game
+# (Lines that start with '#' are c mments)
 # The tiles are:
 #   (Space) Empty tile
-#   A..Z    Tiles A through Z
-#   o       Star
-#   !       Music Note
+#   A..Z    Tiles A thr ugh Z
+#           Star
+#   !       Music N te
 #   *       Goal
-#   1       Bad Guy 1 (grub)
-#   2       Bad Guy 2 (fly)
-BF        o o o                o o o o o o o o o o o o o o o o o o o o o o o                  EB
-AD   -     IIIIIII              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
-AD                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                                           I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
-AD                        !                               IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
-AD                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
-AD         III                                                   CAAAAAAAAAAAAAAAD  o o o o o CA
-AD                  b b b b b        IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
-AD b  b  b  b  b EBBBBBBBBBBBBBBF                                CAAAAAAAAAAAAAAAAD o o o o o CA
+BF                                                                                            EB
+AD   -     BBBBBBB              BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB               CA
+AD                                           B                   EBBBBBBBBBBBBBF              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
+AD                                           B                   CAAAAAAAAAAAAAHF             CA
+AD                                                        BBBBB  CAAAAAAAAAAAAAAD             CA
+AD                      BBBBB                                    CAAAAAAAAAAAAAAHF   BBBBBBB  CA
+AD         BBB                                                   CAAAAAAAAAAAAAAAD            CA
+AD                  b b b b b        BBBBBBBBBBBBB               CAAAAAAAAAAAAAAAHF           CA
+AD b  b cb  b  b EBBBBBBBBBBBBBBF                                CAAAAAAAAAAAAAAAAD           CA
 AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBB11BBBBBBBBBBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA

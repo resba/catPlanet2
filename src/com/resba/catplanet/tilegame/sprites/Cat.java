@@ -91,6 +91,14 @@ public abstract class Cat extends Sprite {
     public int getState() {
         return state;
     }
+    
+    public boolean isRave(){
+       if(this.getState() == STATE_RAVE){
+           return true;
+       }else{
+           return false;
+       }
+    }
 
 
     /**
