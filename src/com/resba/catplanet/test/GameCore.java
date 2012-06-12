@@ -88,7 +88,6 @@ public abstract class GameCore {
         window.setForeground(Color.white);
         screen.setTitle("Cat Planet Duex is loadin' up!");
         screen.setupBuffering();
-        screen.initStatScreen();
         isRunning = true;
     }
 

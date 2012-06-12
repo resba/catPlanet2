@@ -485,16 +485,7 @@ public class CatPlanetResourceManager extends ResourceManager {
 
 
     private void loadPowerUpSprites() {
-        // create "goal" sprite
         Animation anim = new Animation();
-        anim.addFrame(loadImage("heart1.png"), 150);
-        anim.addFrame(loadImage("heart2.png"), 150);
-        anim.addFrame(loadImage("heart3.png"), 150);
-        anim.addFrame(loadImage("heart2.png"), 150);
-        goalSprite = new PowerUp.Goal(anim);
-
-        // create "star" sprite
-        anim = new Animation();
         anim.addFrame(loadImage("star1.png"), 100);
         anim.addFrame(loadImage("star2.png"), 100);
         anim.addFrame(loadImage("star3.png"), 100);
