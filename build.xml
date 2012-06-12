@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
 
-<!-- ===================================================================== -->
-<!-- Developing Games in Java                                              -->
-<!-- Chapter 18: Last 10% (JNLP)                                           -->
-<!-- Ant 1.5 build file                                                    -->
-<!-- ===================================================================== -->
-
 <project name="Cat Planet 2" default="build" basedir=".">
 
     <property name="srcdir" value="src"/>

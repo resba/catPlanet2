@@ -124,7 +124,6 @@ public class ScreenManager {
         Updates the display.
     */
     public void update() {
-        //System.out.println("Update in Screen Manager Called.");
 
         // Sync the display on some systems.
         // (on Linux, this fixes event queue problems)
@@ -133,6 +132,7 @@ public class ScreenManager {
             BufferStrategy strategy = window.getBufferStrategy();
             if (!strategy.contentsLost()) {
                 strategy.show();
+                window.update(this.getGraphics());
             }
         }
     }

@@ -19,7 +19,7 @@ public class MainGameState implements GameState {
 
     private static final int DRUM_TRACK = 1;
 
-    public static final float GRAVITY = 0.001f;
+    public static final float GRAVITY = 0.009f;
 
 
     private SoundManager soundManager;
@@ -145,22 +145,22 @@ public class MainGameState implements GameState {
         	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
             	
-            	velocityX += (-0.005f);
+            	velocityX += (-0.0004f);
             	
             }
             if (moveRight.isPressed()) {
             
-            	velocityX -= (-0.005f);
+            	velocityX -= (-0.0004f);
             	
             }
             if (moveLeft.isPressed() && moveRight.isPressed()){
         			//velocityX = 0;
             }
     		if(velocityX > player.getMaxSpeed()){
-    			velocityX = player.getMaxSpeed();
+    			velocityX = player.getMaxSpeed() + 0.0003f;
     		}
     		if(velocityX < -(player.getMaxSpeed())){
-    			velocityX = -(player.getMaxSpeed());
+    			velocityX = -(player.getMaxSpeed() + 0.0003f);
     		}
         }else{
         	if(velocityX < 0){
@@ -172,6 +172,12 @@ public class MainGameState implements GameState {
         	if(velocityX == 0){
         		velocityX = 0;
         	}
+            if(velocityX > player.getMaxSpeed()){
+               velocityX = player.getMaxSpeed();
+            }
+            if(velocityX < -(player.getMaxSpeed())){
+                velocityX = -(player.getMaxSpeed());
+            }
         }
 
             player.setVelocityX(velocityX);

@@ -86,7 +86,7 @@ public abstract class GameCore {
         window.setFont(new Font("Dialog", Font.PLAIN, FONT_SIZE));
         window.setBackground(Color.blue);
         window.setForeground(Color.white);
-        screen.setTitle("Cat Planet Duex is loadin' up!");
+        screen.setTitle("Cat Planet Cat Planet: More Cat per Planet than the leading Planet.");
         screen.setupBuffering();
         isRunning = true;
     }
