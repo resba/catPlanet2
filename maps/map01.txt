@@ -5,21 +5,21 @@
 #   A..Z    Tiles A thr ugh Z
 #           Star
 #   *       Goal
-BF                                                                                            EB
-AD   -     BBBBBBB              BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB               CA
-AD                                           B                   EBBBBBBBBBBBBBF              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                     BBBBBBB               B                   CAAAAAAAAAAAAAD              CA
-AD                                           B                   CAAAAAAAAAAAAAHF             CA
-AD                                                        BBBBB  CAAAAAAAAAAAAAAD             CA
-AD                      BBBBB                                    CAAAAAAAAAAAAAAHF   BBBBBBB  CA
-AD         BBB                                                   CAAAAAAAAAAAAAAAD            CA
-AD                  b b b b b        BBBBBBBBBBBBB               CAAAAAAAAAAAAAAAHF           CA
-AD b  b cbw b  b EBBBBBBBBBBBBBBF                                CAAAAAAAAAAAAAAAAD           CA
-AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBB11BBBBBBBBBBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA
+F                      D
+D                      B
+D                      B
+D    c                 B
+D   BBB                B
+D                      B
+D                      B
+D                 c    B
+D               BBB    B
+D                      B
+D                      B
+D                      B
+D                      B
+D            c         B
+D          BBB         B
+D                      B
+D  -  b cb  b  b       E
+AHBBBBBBBBBBBBBBAAAAAAAA
