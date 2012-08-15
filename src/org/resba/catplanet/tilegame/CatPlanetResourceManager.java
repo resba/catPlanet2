@@ -12,6 +12,7 @@ import org.resba.catplanet.state.ResourceManager;
 import org.resba.catplanet.tilegame.sprites.*;
 import org.resba.catplanet.transitions.Warper;
 import org.resba.catplanet.util.CatLabel;
+import org.resba.catplanet.util.Recorder;
 
 
 
@@ -298,7 +299,6 @@ public class CatPlanetResourceManager extends ResourceManager {
             sprite.setCurrentMap(this.currentMap);
             sprite.updateID();
             map.addSprite(sprite);
-            
         }
     }
     

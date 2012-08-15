@@ -69,6 +69,11 @@ public class MainGameState implements GameState {
 
         renderer = new TileMapRenderer();
         toggleDrumPlayback();
+    	try {
+        	r = new Recorder();
+        	r.load();
+		} catch (IOException e) {
+		}
     }
 
     public String getName() {
@@ -85,7 +90,7 @@ public class MainGameState implements GameState {
     }
 
     public void loadResources(ResourceManager resManager) {
-
+    	
         resourceManager = (CatPlanetResourceManager)resManager;
 
         resourceManager.loadResources();
@@ -100,13 +105,6 @@ public class MainGameState implements GameState {
         prizeSound = resourceManager.loadSound("sounds/prize.wav");
         boopSound = resourceManager.loadSound("sounds/boop2.wav");
         music = resourceManager.loadSequence("sounds/music.midi");
-        
-        try {
-        	r = new Recorder();
-        	r.load();
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Nope");
-		}
     }
 
     public void start(InputManager inputManager) {
@@ -335,7 +333,14 @@ public class MainGameState implements GameState {
                 else {
                     updateCreature(creature, elapsedTime);
                 }
-            }
+            }else if(sprite instanceof Cat){
+                	Cat raver = (Cat)sprite;
+                	if(r.stillRaving(raver.getID())){
+                		raver.setState(Cat.STATE_RAVE);
+                		raver.setRave(true);
+                		raver.canRave(true);
+                	}
+                }
             // normal update
             sprite.update(elapsedTime);
         }
@@ -461,7 +466,7 @@ public class MainGameState implements GameState {
                 
                 //renderer.addText(cuddlycat.getID(),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
                 
-                
+                r.setInfiniteRave(cuddlycat.getID());
                 renderer.flip(true);
                 CatCounter.addCat();
             }

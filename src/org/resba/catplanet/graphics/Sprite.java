@@ -11,7 +11,7 @@ public class Sprite {
     // velocity (pixels per millisecond)
     private float dx;
     private float dy;
-    
+    private boolean raver;
     private char region;
     private char mapI;
     
@@ -140,6 +140,15 @@ public class Sprite {
      */
     public char getMap(){
     	return this.mapI;
+    }
+
+    public void canRave(boolean t){
+    	if (t){
+    		raver = t;
+    	}
+    	if(!t){
+    		raver = t;
+    	}
     }
     
     /**

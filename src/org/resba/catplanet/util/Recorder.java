@@ -12,10 +12,17 @@ public class Recorder {
 	
 	public ArrayList<String> ids;
 	public ArrayList<String> lines;
+	public ArrayList<String> switches;
+	public ArrayList<String> switchids;
 	
 	public Recorder(){
 	this.ids = new ArrayList<String>();
 	this.lines = new ArrayList<String>();
+	
+	
+	this.switches = new ArrayList<String>();
+	this.switchids = new ArrayList<String>();
+	
 	}
 	
 	public void load() throws IOException{
@@ -39,14 +46,31 @@ public class Recorder {
 	        
 	        if (!line.startsWith("#")) {
 	            ids.add(line.split("=")[0]);
-	            JOptionPane.showMessageDialog(null, line.split("=")[0]+" ----- "+line.split("=")[1]);
 	            lines.add(line.split("=")[1]);
+	            
 	        }
 	    }
 	}
 	
 	public String getStringByID(String ID){
 		return lines.get(ids.indexOf(ID));
+	}
+	
+	public void setInfiniteRave(String ID){
+		switches.add("1");
+		switchids.add(ID);
+	}
+	
+	public boolean stillRaving(String ID){
+		try{
+		if(switches.get(switchids.indexOf(ID)) == "1"){
+			return true;
+		}else{
+			return false;
+		}
+		}catch(Exception e){
+			return false;
+		}
 	}
 	
 }
