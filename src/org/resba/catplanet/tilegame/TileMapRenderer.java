@@ -182,8 +182,10 @@ public class TileMapRenderer {
         g.setColor(Color.black);
         g.setBackground(Color.WHITE);
         g.drawString("cats x"+ CatCounter.getCATS(),tilesToPixels(1),tilesToPixels(2));
-        g.drawString("player x: "+Math.round(player.getX())+ offsetX, tilesToPixels(1), tilesToPixels(4));
-        g.drawString("player y: "+Math.round(player.getY())+ offsetY, tilesToPixels(1), tilesToPixels(5));
+        //g.drawString("player velocity x: "+player.getVelocityX(), tilesToPixels(1), tilesToPixels(3));
+        //g.drawString("player velocity y: "+player.getVelocityY(), tilesToPixels(1), tilesToPixels(4));
+        //g.drawString("player x: "+Math.round(player.getX())+ offsetX, tilesToPixels(1), tilesToPixels(5));
+        //g.drawString("player y: "+Math.round(player.getY())+ offsetY, tilesToPixels(1), tilesToPixels(6));
         if(s.size() > 0){
             for(int in = 0; s.size() > in; in++){
                         g.drawString(s.get(in),tilesToPixels(Integer.parseInt(xn.get(in)))+offsetX,tilesToPixels(Integer.parseInt(yn.get(in)))+offsetY);

@@ -8,3 +8,11 @@ catplanetres.jar
 build/*
 bin/*
 out/*
+catplanet.jar
+catplanet.jar.bak
+.project
+.htaccess
+.classpath
+.DS_Store
+.settings/*
+.settings/

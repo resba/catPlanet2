@@ -36,6 +36,10 @@ public class Player extends Entity {
         	setVelocityY(-(getVelocityY())+(-0.25f));
         }
         
+        if(getVelocityY() < 0.01 && getVelocityY() > -0.01){
+        	setVelocityY(0.0f);
+        }
+        
     }
 
 
