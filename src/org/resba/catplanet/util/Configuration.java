@@ -54,7 +54,7 @@ public class Configuration {
 	}
 	
 	public boolean isDevelopment(){
-		return false;
+		return true;
 	}
 	
 }

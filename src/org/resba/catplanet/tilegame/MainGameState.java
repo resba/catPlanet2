@@ -494,6 +494,7 @@ public class MainGameState implements GameState {
         	Transition t = (Transition)collisionSprite;
         	setBackground("background"+t.getRegion()+".png");
             renderer.removeAllText();
+            System.out.println("what is: "+t.getRegion()+""+t.getMap());
         	map = resourceManager.selectMap(t.getRegion(), t.getMap());
         }
         else if (collisionSprite instanceof Respawn) {
@@ -519,7 +520,7 @@ public class MainGameState implements GameState {
             // advance to next map
             soundManager.play(prizeSound,
                 new EchoFilter(2000, .7f), false);
-            map = resourceManager.selectMap('0', '2');
+            //map = resourceManager.selectMap('0', '2');
         }
     }
 

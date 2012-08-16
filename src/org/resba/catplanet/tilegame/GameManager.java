@@ -18,7 +18,7 @@ import org.resba.catplanet.util.TimeSmoothie;
 */
 public class GameManager extends GameCore {
 
-    static final Logger log = Logger.getLogger("com.resba.catplanet.tilegame");
+    static final Logger log = Logger.getLogger("org.resba.catplanet.tilegame");
 
     public static void main(String[] args) {
         new GameManager().run();

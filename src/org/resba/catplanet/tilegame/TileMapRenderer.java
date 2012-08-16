@@ -29,7 +29,7 @@ import org.resba.catplanet.util.CatCounter;
 */
 public class TileMapRenderer {
 
-    private static final int TILE_SIZE = 8;
+    private static final int TILE_SIZE = 32;
     // the size in bits of the tile
     // Math.pow(2, TILE_SIZE_BITS) == TILE_SIZE
     private static final int TILE_SIZE_BITS = 5;
@@ -188,11 +188,6 @@ public class TileMapRenderer {
         g.drawString("player velocity y: "+player.getVelocityY(), tilesToPixels(1), tilesToPixels(4));
         g.drawString("player x: "+pixelsToTiles(Math.round(player.getX()))+ offsetX, tilesToPixels(1), tilesToPixels(5));
         g.drawString("player y: "+pixelsToTiles(Math.round(player.getY()))+ offsetY, tilesToPixels(1), tilesToPixels(6));
-        if(extra!=""){
-        	g.drawString("respawn: "+this.extra, tilesToPixels(1), tilesToPixels(7));
-        }else{
-        	
-        }
         if(s.size() > 0){
             for(int in = 0; s.size() > in; in++){
                         g.drawString(s.get(in),tilesToPixels(Integer.parseInt(xn.get(in)))+offsetX,tilesToPixels(Integer.parseInt(yn.get(in)))+offsetY);

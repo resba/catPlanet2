@@ -5,6 +5,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.resba.catplanet.graphics.*;
 import org.resba.catplanet.sound.MidiPlayer;
 import org.resba.catplanet.sound.SoundManager;
@@ -47,6 +49,9 @@ public class CatPlanetResourceManager extends ResourceManager {
     
     private char mapR;
     private char regR;
+    
+    private char mapLast;
+    private char regLast;
 
     /**
         Creates a new ResourceManager with the specified
@@ -69,11 +74,14 @@ public class CatPlanetResourceManager extends ResourceManager {
 
 
     public TileMap loadFirstMap() {
+    	System.out.println("Got to loadFirstMap");
     	currentMap = "map01";
     	lastMap = "";
     	this.mapside = false;
     	this.mapR = '1';
     	this.regR = '0';
+    	this.mapLast = '1';
+    	this.regLast = '0';
     	
         TileMap map = null;
             try {
@@ -84,9 +92,10 @@ public class CatPlanetResourceManager extends ResourceManager {
             }
             catch (IOException ex) {
                 if (currentMap == "map01") {
-                    // no maps to load!
+                	System.out.println("Inside the no maps loaded exception");
                     return null;
                 }
+                System.out.println("Inside the catch.");
                 currentMap = "map01";
                 lastMap = "";
                 map = null;
@@ -95,21 +104,27 @@ public class CatPlanetResourceManager extends ResourceManager {
         return map;
     }
     public TileMap selectMap(char regID, char mapID) {
+    	System.out.println("Selecting a map.");
     	lastMap = currentMap;
+    	mapLast = lastMap.charAt(4);
+    	regLast = lastMap.charAt(3);
     	currentMap = "map"+regID+""+mapID;
+    	System.out.println("Current Map: "+currentMap);
         TileMap map = null;
             try {
+            	System.out.println("Trying.");
                 map = loadMap(
-                    "maps/map" + regID +""+ mapID + ".txt", mapside);
+                    "maps/"+currentMap+".txt", mapside);
+                System.out.println("Current Map:"+currentMap);
             	this.mapR = mapID;
             	this.regR = regID;
-                currentMap = "map"+regID+""+mapID;
             }
             catch (IOException ex) {
                 if (currentMap == "map01") {
-                    // no maps to load!
+                	System.out.println("Hit the IOException in SelectMap");
                     return null;
                 }
+                System.out.println("Hit the IOException.");
                 currentMap = "map01";
             	this.mapR = '1';
             	this.regR = '0';
@@ -126,7 +141,8 @@ public class CatPlanetResourceManager extends ResourceManager {
                 "maps/" + currentMap + ".txt", mapside);
         }
         catch (IOException ex) {
-            return loadFirstMap();
+        	System.out.println("Got here at reload map.");
+            return null;
         }
     }
 
@@ -134,6 +150,29 @@ public class CatPlanetResourceManager extends ResourceManager {
     private TileMap loadMap(String filename, boolean trigger)
         throws IOException
     {
+    	char tR = 'a';
+    	char tM = 'a';
+    	boolean tRes = false;
+    	char uR = 'a';
+    	char uM = 'a';
+    	boolean uRes = false;
+    	char vR = 'a';
+    	char vM = 'a';
+    	boolean vRes = false;
+    	char xR = 'a';
+    	char xM = 'a';
+    	boolean xRes = false;
+    	char yR = 'a';
+    	char yM = 'a';
+    	boolean yRes = false;
+    	char zR = 'a';
+    	char zM = 'a';
+    	boolean zRes = false;
+    	
+    	boolean explicit = false;
+    	
+    	boolean playerSpawned = false;
+    	
     	int spawnX = 0;
     	int spawnY = 0;
         ArrayList<String> lines = new ArrayList<String>();
@@ -143,6 +182,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         ClassLoader classLoader = getClass().getClassLoader();
         URL url = classLoader.getResource(filename);
         if (url == null) {
+        	System.out.println("got a no such map.");
             throw new IOException("No such map: " + filename);
         }
 
@@ -162,9 +202,64 @@ public class CatPlanetResourceManager extends ResourceManager {
                 lines.add(line);
                 width = Math.max(width, line.length());
             }
+            //System.out.println("hi");
+            if(line.startsWith(":")){
+            	if(line.split("=")[0].contains(":t")){
+            		 tR = line.split("=")[1].charAt(0);
+            		 tM = line.split("=")[1].charAt(1);
+            		 if(tR==regLast && tM==mapLast){
+            		 tRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":u")){
+            		 uR = line.split("=")[1].charAt(0);
+            		 uM = line.split("=")[1].charAt(1);
+            		 if(uR==regLast && uM==mapLast){
+            		 uRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":v")){
+            		 vR = line.split("=")[1].charAt(0);
+            		 vM = line.split("=")[1].charAt(1);
+            		 if(vR==regLast && vM==mapLast){
+            		 vRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":x")){
+            		 xR = line.split("=")[1].charAt(0);
+            		 xM = line.split("=")[1].charAt(1);
+            		 if(xR==regLast && xM==mapLast){
+            		 xRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":y")){
+            		 yR = line.split("=")[1].charAt(0);
+            		 yM = line.split("=")[1].charAt(1);
+            		 if(yR==regLast && yM==mapLast){
+            		 yRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":z")){
+            		 zR = line.split("=")[1].charAt(0);
+            		 zM = line.split("=")[1].charAt(1);
+            		 if(zR==regLast && zM==mapLast){
+            		 zRes = true;
+            		 }
+            	}
+            	if(line.split("=")[0].contains(":explicit")){
+            	//System.out.println("Explicit is up.");
+            	if(line.split("=")[1].contains("yes")){
+            		//System.out.println("Explicit is true");
+            		explicit = true;	
+            	}else if (line.split("=")[1].contains("no")){
+            		//System.out.println("Explicit is false");
+            		explicit = false;
+            	}
+           	}
+            }
 
         }
-
+        System.out.println("t: "+tR+" "+tM+" "+tRes+"\nu: "+uR+" "+uM+" "+uRes+"\nv: "+vR+" "+vM+" "+vRes+"\nx: "+xR+" "+xM+" "+xRes+"\ny: "+yR+" "+yM+" "+yRes+"\nz: "+zR+" "+zM+" "+zRes+"\nExplicit: "+explicit);
         // parse the lines to create a TileEngine
         height = lines.size();
         TileMap newMap = new TileMap(width, height);
@@ -186,32 +281,22 @@ public class CatPlanetResourceManager extends ResourceManager {
                 else if (ch == '*') {
                     addSprite(newMap, goalSprite, x, y,'a','a');
                 }
-                //Left-side map respawns
+                //map transitions (shit is gonna get CRAZY.)
                 else if (ch == '-') {
+                	if(this.lastMap == ""){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
 
                     // add it to the map
                     newMap.setPlayer(player);
-                }
-                //Right-side map respawns
-                else if (ch == '_') {
-                	Sprite player = (Sprite)playerSprite.clone();
-
-                    newMap.setPlayerCoordinates(player, x, y);
-
-                    // add it to the map
-                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                	}
                 }
                 else if(ch == 'b') {
                 	addSprite(newMap, groundFoliage, x, y, 'a', 'a');
                 }
                 
-                else if (ch == 'x') {
-                	/**TODO: Respawn**/
-                	addSprite(newMap, playerSpawn, x, y,'a','a');
-                }
                 else if (ch == 'c') {
                 	/**TODO: Cat Text**/
                 	addSprite(newMap, catPlanetCat, x, y,'a','a');
@@ -233,35 +318,128 @@ public class CatPlanetResourceManager extends ResourceManager {
                 else if(ch == 'w') {
                 	addSprite(newMap, ceilingSpike, x,y,'a','a');
                 }
-                // Map 1, region 0
-                else if (ch == '1' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                
+                
+                
+                else if(ch == 't') {
+                	addSprite(newMap, transition, x,y,tR,tM);
                 }
-                // Map 2, region 0
-                else if (ch == '2' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                else if(ch == 'u') {
+                	addSprite(newMap, transition, x,y,uR,uM);
                 }
-                // Map 3, region 0
-                else if (ch == '3' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                else if(ch == 'v') {
+                	addSprite(newMap, transition, x,y,vR,vM);
                 }
-                // Map 4, region 0
-                else if (ch == '4' && line.charAt(x-1) == '0'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                else if(ch == 'x') {
+                	addSprite(newMap, transition, x,y,xR,xM);
                 }
-                // Map 0, region 1
-                else if (ch == '1' && line.charAt(x-1) == '1'){                
-                	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
-                	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
+                else if(ch == 'y') {
+                	addSprite(newMap, transition, x,y,yR,yM);
                 }
-             // Map 0, region 2; right side.
-                else if (ch == '0' && line.charAt(x+1) == '2'){                
-                	addSprite(newMap, transition, x, y,ch,line.charAt(x+1));
-                	addSprite(newMap, transition, x+1,y,ch,line.charAt(x+1));
+                else if(ch == 'z') {
+                	addSprite(newMap, transition, x,y,zR,zM);
+                }
+                
+                
+                
+                else if (ch == 'f') {
+                	if(tRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                else if (ch == 'g') {
+                	if(uRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                else if (ch == 'h') {
+                	if(vRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                else if (ch == 'i') {
+                	if(xRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                else if (ch == 'j') {
+                	if(yRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                else if (ch == 'k') {
+                	if(zRes){
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                	}
+                }
+                
+                
+                
+                else if(ch == '!'){
+                	if(explicit && !playerSpawned && tRes){
+                		Sprite player = (Sprite)playerSprite.clone();
+
+                        newMap.setPlayerCoordinates(player, x, y);
+
+                        // add it to the map
+                        newMap.setPlayer(player);
+                        playerSpawned = true;
+                	}
+                }
+                else if(ch == '@'){
+                  if(explicit && !playerSpawned){
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                  }
+                }
+                else if(ch == '$'){
+                  if(explicit && !playerSpawned){
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                  }
+                }
+                else if(ch == '%'){
+                	if(explicit && !playerSpawned){
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                	}
+                }
+                else if(ch == '^'){
+                	if(explicit && !playerSpawned){
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                	}
+                }
+                else if(ch == '&'){
+                	if(explicit && !playerSpawned){
+                	Sprite player = (Sprite)playerSprite.clone();
+
+                    newMap.setPlayerCoordinates(player, x, y);
+
+                    // add it to the map
+                    newMap.setPlayer(player);
+                    playerSpawned = true;
+                	}
                 }
             }
         }

@@ -1,18 +1,40 @@
-# Map file for tile-based game
-# (Lines that start with '#' are comments)
-# The tiles are:
-#   (Space) Empty tile
-#   A..Z    Tiles A through Z
-#   o       Star
-#   *       Goal
-BF                               o o o o o o o o o o o o o o o o o o o o o o o                EB
-01                              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
-01                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
-01                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-01                                           I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
-01                                                        IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
-01                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
-01                                                               CAAAAAAAAAAAAAAAD  o o o o o CA
-01  xxx           wwwwwwwwwwww       IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
-01  x-x         EBBBBBBBBBBBBBBBF     o o o o o o        x  *    CAAAAAAAAAAAAAAAAD o o o o o CA
-AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBB03BBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA
+# map02 for CatPlanet2 (http://www.resba.org/p/catplanet2)
+# 
+# Map by resba (http://www.resba.org/)
+#
+# ==Character Definitions==
+# map transitions: t,u,v,x,y,z    (map transitions and
+# respawns       : f,g,h,i,j,k                         respawns are linked.)
+# explicit spawns: !,@,$,%,^,&
+# player spawn   : -
+# tiles          : A-Z
+# entities       : c (cat), b (foliage) 
+# spikes         : w (facing up), s (facing down), a (facing right), d (facing left)
+# everything else: (space) (air), # (comment things.)
+#
+:explicit=no
+:t=01
+:u=aa
+:v=aa
+:w=aa
+:x=aa
+:y=aa
+:z=aa
+F                       t
+D                       t
+D    f                  t
+D   f-f                 t
+D   BBB                 t
+D                       t
+D                       t
+D                       t
+D               BBB     t
+D                       t
+D   w                   t
+D   s                   t
+D                       t
+D                       t
+D          BBB          t
+D                       t
+D     b  b  b  b        t
+AHBBBBBBBBBBBBBBAAAAAAAAA

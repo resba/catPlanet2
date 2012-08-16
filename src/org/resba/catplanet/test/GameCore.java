@@ -45,6 +45,8 @@ public abstract class GameCore {
         try {
             init();
             gameLoop();
+        }catch(Exception e){
+        	e.printStackTrace();
         }
         finally {
             screen.restoreScreen();

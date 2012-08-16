@@ -5,6 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.io.*;
 import java.net.URL;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.sound.midi.Sequence;
 
 import org.resba.catplanet.sound.*;
@@ -51,6 +52,7 @@ public class ResourceManager {
     */
     public Image loadImage(String name) {
         String filename = "images/" + name;
+        System.out.println("what is: "+filename);
         return new ImageIcon(getResource(filename)).getImage();
     }
 

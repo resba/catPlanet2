@@ -1,4 +1,4 @@
-# map01 for CatPlanet2 (http://www.resba.org/p/catplanet2)
+# map04 for CatPlanet2 (http://www.resba.org/p/catplanet2)
 # 
 # Map by resba (http://www.resba.org/)
 #
@@ -23,19 +23,19 @@
 #
 F                      t
 D                      t
-D                      t
-D    c                 t
+D    f                 t
+D   f!f                t
 D   BBB                t
 D                      t
 D                      t
-D               c      t
+D                      t
 D              BBB     t
 D                      t
+D   w                  t
+D   s                  t
 D                      t
 D                      t
+D          BBB         t
 D                      t
-D            c         t
-D          BBB       f t
-D                   f!ft
-D  -  b cb  b  b     f t
+D     b  b  b  b       t
 AHBBBBBBBBBBBBBBAAAAAAAA
