@@ -16,11 +16,15 @@
 :t=02
 :u=aa
 :v=aa
-:w=aa
 :x=aa
 :y=aa
 :z=aa
 #
+DDDDDDDDDDDDDDDDDDDDDDDD
+D                      D
+D                      D
+D                      D
+D                      D
 D            c         t
 D          BBB       f t
 D                   f!ft
