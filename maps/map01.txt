@@ -21,19 +21,6 @@
 :y=aa
 :z=aa
 #
-F                      t
-D                      t
-D                      t
-D    c                 t
-D   BBB                t
-D                      t
-D                      t
-D               c      t
-D              BBB     t
-D                      t
-D                      t
-D                      t
-D                      t
 D            c         t
 D          BBB       f t
 D                   f!ft

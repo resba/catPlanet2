@@ -14,27 +14,15 @@
 #
 :explicit=yes
 :t=01
-:u=aa
+:u=03
 :v=aa
 :w=aa
 :x=aa
 :y=aa
 :z=aa
-F                     t
-D                     t
-D    f                t
-D   f!f               t
-D   BBB               t
-D                     t
-D                     t
-D                     t
-D             BBB     t
-D                     t
-D   w                 t
-D   s                 t
-D                     t
-D                     t
-D        BBB          t
-D                     t
-D      b  b  b        t
+#
+t  f                    D
+t f!f                   D
+t BBB             c   g D
+t      b  b  b       g@gu
 AHBBBBBBBBBBBBBBAAAAAAAAA
