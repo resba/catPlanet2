@@ -29,10 +29,10 @@ import org.resba.catplanet.util.CatCounter;
 */
 public class TileMapRenderer {
 
-    private static final int TILE_SIZE = 32;
+    private static final int TILE_SIZE = 36;
     // the size in bits of the tile
     // Math.pow(2, TILE_SIZE_BITS) == TILE_SIZE
-    private static final int TILE_SIZE_BITS = 5;
+    private static final int TILE_SIZE_BITS = 6;
 
     private Image background;
     private String label;
@@ -119,11 +119,8 @@ public class TileMapRenderer {
         int mapWidth = tilesToPixels(map.getWidth());
         // get the scrolling position of the map
         // based on player's position
-        int offsetX = screenWidth / 2 -
-            Math.round(player.getX()) - TILE_SIZE;
-        offsetX = Math.min(offsetX, 0);
+        int offsetX = screenWidth / 2 - Math.round(player.getX()) - TILE_SIZE;
         offsetX = Math.max(offsetX, screenWidth - mapWidth);
-
         // get the y offset to draw all sprites and tiles
         int offsetY = screenHeight -
             tilesToPixels(map.getHeight());
@@ -138,9 +135,7 @@ public class TileMapRenderer {
 
         // draw parallax background image
         if (background != null) {
-            int x = offsetX *
-                (screenWidth - background.getWidth(null)) /
-                (screenWidth - mapWidth);
+            int x = offsetX * (screenWidth - background.getWidth(null)) / (screenWidth - mapWidth);
             int y = screenHeight - background.getHeight(null);
 
             g.drawImage(background, x, y, null);

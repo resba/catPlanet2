@@ -108,6 +108,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     	lastMap = currentMap;
     	mapLast = lastMap.charAt(4);
     	regLast = lastMap.charAt(3);
+    	this.mapside = false;
     	currentMap = "map"+regID+""+mapID;
     	System.out.println("Current Map: "+currentMap);
         TileMap map = null;
@@ -201,6 +202,7 @@ public class CatPlanetResourceManager extends ResourceManager {
             if (!line.startsWith("#")) {
                 lines.add(line);
                 width = Math.max(width, line.length());
+                System.out.println(width+"");
             }
             //System.out.println("hi");
             if(line.startsWith(":")){
@@ -387,7 +389,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	}
                 }
                 else if(ch == '@'){
-                  if(explicit && !playerSpawned){
+                  if(explicit && !playerSpawned && uRes){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
@@ -398,7 +400,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                   }
                 }
                 else if(ch == '$'){
-                  if(explicit && !playerSpawned){
+                  if(explicit && !playerSpawned && vRes){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
@@ -409,7 +411,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                   }
                 }
                 else if(ch == '%'){
-                	if(explicit && !playerSpawned){
+                	if(explicit && !playerSpawned && xRes){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
@@ -420,7 +422,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	}
                 }
                 else if(ch == '^'){
-                	if(explicit && !playerSpawned){
+                	if(explicit && !playerSpawned && yRes){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);
@@ -431,7 +433,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	}
                 }
                 else if(ch == '&'){
-                	if(explicit && !playerSpawned){
+                	if(explicit && !playerSpawned && zRes){
                 	Sprite player = (Sprite)playerSprite.clone();
 
                     newMap.setPlayerCoordinates(player, x, y);

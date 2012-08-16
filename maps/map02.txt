@@ -12,7 +12,7 @@
 # spikes         : w (facing up), s (facing down), a (facing right), d (facing left)
 # everything else: (space) (air), # (comment things.)
 #
-:explicit=no
+:explicit=yes
 :t=01
 :u=aa
 :v=aa
@@ -20,21 +20,21 @@
 :x=aa
 :y=aa
 :z=aa
-F                       t
-D                       t
-D    f                  t
-D   f-f                 t
-D   BBB                 t
-D                       t
-D                       t
-D                       t
-D               BBB     t
-D                       t
-D   w                   t
-D   s                   t
-D                       t
-D                       t
-D          BBB          t
-D                       t
-D     b  b  b  b        t
+F                     t
+D                     t
+D    f                t
+D   f!f               t
+D   BBB               t
+D                     t
+D                     t
+D                     t
+D             BBB     t
+D                     t
+D   w                 t
+D   s                 t
+D                     t
+D                     t
+D        BBB          t
+D                     t
+D      b  b  b        t
 AHBBBBBBBBBBBBBBAAAAAAAAA
