@@ -16,6 +16,7 @@ import org.resba.catplanet.tilegame.sprites.*;
 import org.resba.catplanet.util.CatCounter;
 import org.resba.catplanet.util.CatLabel;
 import org.resba.catplanet.util.Recorder;
+import org.resba.catplanet.util.Configuration;
 
 
 
@@ -50,6 +51,7 @@ public class MainGameState implements GameState {
     private long timer;
     
     private Recorder r;
+    private Configuration cfg;
 
     private float playerVX;
 
@@ -74,6 +76,8 @@ public class MainGameState implements GameState {
         	r.load();
 		} catch (IOException e) {
 		}
+    	
+    		cfg = new Configuration();
     }
 
     public String getName() {
@@ -305,6 +309,7 @@ public class MainGameState implements GameState {
     	p.setState(Entity.STATE_NORMAL);
     	p.setVelocityX(0);
     	p.setVelocityY(0);
+    	r.setState(Respawn.STATE_NORMAL);
     }
 
     /**
@@ -354,13 +359,9 @@ public class MainGameState implements GameState {
             }else if(sprite instanceof Respawn){
             		Respawn res = (Respawn)sprite;
             	if(player.getState() == Entity.STATE_RESPAWN){
-            			if (player.getState() == Entity.STATE_RESPAWN && res.getState() == Respawn.STATE_ACTIVE) {
+            			if (res.getState() == Respawn.STATE_ACTIVE) {
                     		respawnPlayer(res, (Player)player);
-                    	}else if(res.getState() != Respawn.STATE_ACTIVE && player.getState() == Entity.STATE_RESPAWN){
-                    		player.setState(Entity.STATE_DYING);
-                    	}else{
-                    		player.setState(Entity.STATE_DYING);
-                    	}
+            			}
             	}
             }
             // normal update
@@ -479,16 +480,12 @@ public class MainGameState implements GameState {
                 cuddlycat.setState(Cat.STATE_RAVE);
                 
                 //renders the cat text.
-                
+                if(!cfg.isDevelopment()){
                 renderer.addText(r.getStringByID(cuddlycat.getID()),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
-                
-                //Next line is for debugging, espically when your adding, removing, or repositioning cats.
-                //Make sure you know what your changing!
-                //Dont forget to comment the line above this out if your doing some debug magicks
-                
-                //renderer.addText(cuddlycat.getID(),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
-                
                 r.setInfiniteRave(cuddlycat.getID());
+                }else{
+                	renderer.addText(cuddlycat.getID(),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
+                }
                 renderer.flip(true);
                 CatCounter.addCat();
             }

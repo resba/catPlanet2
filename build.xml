@@ -51,8 +51,8 @@
         	<fileset dir="${basedir}" includes="sounds/**"/>
         	<fileset dir="${basedir}" includes="maps/**"/>
             <fileset dir="${basedir}" includes="strings/**"/>
+        	<fileset dir="${basedir}" includes="config/**"/>
         </jar>
-
 
         <jar jarfile="${basedir}/catplanetres.jar">
             <fileset dir="${basedir}" includes="images/**"/>

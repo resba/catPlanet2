@@ -14,5 +14,5 @@ BF                               o o o o o o o o o o o o o o o o o o o o o o o  
 01                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
 01                                                               CAAAAAAAAAAAAAAAD  o o o o o CA
 01  xxx           wwwwwwwwwwww       IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
-01  x-x         EBBBBBBBBBBBBBBBF     o o o o o o           *    CAAAAAAAAAAAAAAAAD o o o o o CA
+01  x-x         EBBBBBBBBBBBBBBBF     o o o o o o        x  *    CAAAAAAAAAAAAAAAAD o o o o o CA
 AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBB03BBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA

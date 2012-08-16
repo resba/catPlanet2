@@ -3,7 +3,7 @@
 #map01
 260.0:520.0:map01=Welcome to cat planet!
 420.0:424.0:map01=We're back for more!
-580.0:232.0:map01=Yeowza!
+516.0:232.0:map01=Yeowza!
 164.0:104.0:map01=Come see me when you've beaten the game!
 516.0:520.0:map11=Have fun!
 932.0:520.0:map11=I like to spiiin!

@@ -12,7 +12,7 @@ D    c               x02
 D   BBB              x02
 D                    x02
 D                    x02
-D                c   x02
+D               c    x02
 D              BBB   x02
 Dd                   x02
 D                    x02
