@@ -13,7 +13,7 @@
 # everything else: (space) (air), # (comment things.)
 #
 :explicit=yes
-:t=aa
+:t=02
 :u=02
 :v=aa
 :x=aa

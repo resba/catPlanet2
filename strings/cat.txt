@@ -1,9 +1,8 @@
 #Cat Planet Cat Planet Text Planet Strings Cat!
 #WARNING: Don't use = if you change anything, they're delimiters. Also dont use spaces.
 #map01
-532.0:1576.0:map01=Welcome to cat planet!
-852.0:1384.0:map01=We're back for more!
-516.0:232.0:map01=Yeowza!
-164.0:104.0:map01=Come see me when you've beaten the game!
-516.0:520.0:map11=Have fun!
-932.0:520.0:map11=I like to spiiin!
+532.0:1000.0:map01=Welcome to cat planet!
+852.0:808.0:map01=We're back for more!
+1172.0:936.0:map02=Yahoo! I'm floating!
+468.0:1000.0:map03=Watchout for spikes!
+1300.0:1000.0:map03=Yeowch! Spikes are dangerous!
