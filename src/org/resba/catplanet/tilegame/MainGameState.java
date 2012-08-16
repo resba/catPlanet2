@@ -298,6 +298,14 @@ public class MainGameState implements GameState {
         return null;
     }
 
+    
+    public void respawnPlayer(Respawn r, Player p){
+    	p.setX(r.getX());
+    	p.setY(r.getY());
+    	p.setState(Entity.STATE_NORMAL);
+    	p.setVelocityX(0);
+    	p.setVelocityY(0);
+    }
 
     /**
         Updates Animation, position, and velocity of all Sprites
@@ -314,6 +322,8 @@ public class MainGameState implements GameState {
             map = resourceManager.reloadMap();
             return;
         }
+        
+
 
         // get keyboard/mouse input
         checkInput(elapsedTime);
@@ -341,7 +351,18 @@ public class MainGameState implements GameState {
                 		raver.setRave(true);
                 		raver.canRave(true);
                 	}
-                }
+            }else if(sprite instanceof Respawn){
+            		Respawn res = (Respawn)sprite;
+            	if(player.getState() == Entity.STATE_RESPAWN){
+            			if (player.getState() == Entity.STATE_RESPAWN && res.getState() == Respawn.STATE_ACTIVE) {
+                    		respawnPlayer(res, (Player)player);
+                    	}else if(res.getState() != Respawn.STATE_ACTIVE && player.getState() == Entity.STATE_RESPAWN){
+                    		player.setState(Entity.STATE_DYING);
+                    	}else{
+                    		player.setState(Entity.STATE_DYING);
+                    	}
+            	}
+            }
             // normal update
             sprite.update(elapsedTime);
         }
@@ -435,7 +456,7 @@ public class MainGameState implements GameState {
             acquirePowerUp((PowerUp)collisionSprite);
         }
         else if (collisionSprite instanceof Spike) {
-        	player.setState(Entity.STATE_DYING);
+        	player.setState(Entity.STATE_RESPAWN);
         }
         else if (collisionSprite instanceof Entity) {
             Entity badguy = (Entity)collisionSprite;
@@ -477,6 +498,10 @@ public class MainGameState implements GameState {
         	setBackground("background"+t.getRegion()+".png");
             renderer.removeAllText();
         	map = resourceManager.selectMap(t.getRegion(), t.getMap());
+        }
+        else if (collisionSprite instanceof Respawn) {
+        	Respawn k = (Respawn)collisionSprite;
+        	k.setState(Respawn.STATE_ACTIVE);
         }
     }
 

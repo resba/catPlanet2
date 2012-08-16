@@ -28,6 +28,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private ArrayList<Character> regions;
     private ArrayList<Character> maps;
     private String currentMap;
+    private String lastMap;
 
     // host sprites used for cloning
     private Sprite playerSprite;
@@ -69,6 +70,7 @@ public class CatPlanetResourceManager extends ResourceManager {
 
     public TileMap loadFirstMap() {
     	currentMap = "map01";
+    	lastMap = "";
     	this.mapside = false;
     	this.mapR = '1';
     	this.regR = '0';
@@ -78,6 +80,7 @@ public class CatPlanetResourceManager extends ResourceManager {
                 map = loadMap(
                     "maps/map01.txt",mapside);
                 currentMap = "map01";
+                lastMap = "";
             }
             catch (IOException ex) {
                 if (currentMap == "map01") {
@@ -85,12 +88,14 @@ public class CatPlanetResourceManager extends ResourceManager {
                     return null;
                 }
                 currentMap = "map01";
+                lastMap = "";
                 map = null;
         }
 
         return map;
     }
     public TileMap selectMap(char regID, char mapID) {
+    	lastMap = currentMap;
     	currentMap = "map"+regID+""+mapID;
         TileMap map = null;
             try {
@@ -165,7 +170,6 @@ public class CatPlanetResourceManager extends ResourceManager {
         TileMap newMap = new TileMap(width, height);
         for (int y=0; y<height; y++) {
             String line = lines.get(y);
-            int respawn = 0;
             for (int x=0; x<line.length(); x++) {
                 char ch = line.charAt(x);
 
@@ -204,11 +208,10 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	addSprite(newMap, groundFoliage, x, y, 'a', 'a');
                 }
                 
-                //else if (ch == 'x') {
+                else if (ch == 'x') {
                 	/**TODO: Respawn**/
-                	//addSprite(newMap, playerSpawn, x, y,'r',Integer.toString(respawn).charAt(0)); //I'm a hackish little devil I am.
-                	//respawn++;
-                //}
+                	addSprite(newMap, playerSpawn, x, y,'a','a');
+                }
                 else if (ch == 'c') {
                 	/**TODO: Cat Text**/
                 	addSprite(newMap, catPlanetCat, x, y,'a','a');
@@ -255,6 +258,11 @@ public class CatPlanetResourceManager extends ResourceManager {
                 	addSprite(newMap, transition, x, y,line.charAt(x-1),ch);
                 	addSprite(newMap, transition, x-1,y,line.charAt(x-1),ch);
                 }
+             // Map 0, region 2; right side.
+                else if (ch == '0' && line.charAt(x+1) == '2'){                
+                	addSprite(newMap, transition, x, y,ch,line.charAt(x+1));
+                	addSprite(newMap, transition, x+1,y,ch,line.charAt(x+1));
+                }
             }
         }
 
@@ -264,6 +272,7 @@ public class CatPlanetResourceManager extends ResourceManager {
     private void addWarp(String id, int x, int y){
     	new Warper(id,x,y);
     }
+    
     
     private void addSprite(TileMap map,
         Sprite hostSprite, int tileX, int tileY, char region, char mapI)
@@ -455,7 +464,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         ceilingSpike = new Spike(spikeupAnim[0],spikeupAnim[1],spikeupAnim[2],spikeupAnim[3]);
         groundSpike = new Spike(spikedownAnim[0],spikedownAnim[1],spikedownAnim[2],spikedownAnim[3]);
         groundFoliage = new Background(foliageAnim[0]);
-        
+        playerSpawn = new Respawn(tranAnim[0]);
     }
 
 
@@ -505,6 +514,14 @@ public class CatPlanetResourceManager extends ResourceManager {
         anim.addFrame(loadImage("star3.png"), 100);
         anim.addFrame(loadImage("star4.png"), 100);
         coinSprite = new PowerUp.Star(anim);
+    }
+    
+    public String getLastMap(){
+    	return this.lastMap;
+    }
+    
+    public String getCurrentMap(){
+    	return this.currentMap;
     }
 
 }

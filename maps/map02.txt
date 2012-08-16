@@ -5,15 +5,14 @@
 #   A..Z    Tiles A through Z
 #   o       Star
 #   *       Goal
-                                  
-BF   03                          o o o o o o o o o o o o o o o o o o o o o o o                EB
-AD   -                          IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
-AD                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
-AD                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
-AD                                           I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
-AD                        !                               IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
-AD                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
-AD                                                               CAAAAAAAAAAAAAAAD  o o o o o CA
-AD                                   IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
-AD              EBBBBBBBBBBBBBBBF     o o o o o o           *    CAAAAAAAAAAAAAAAAD o o o o o CA
+BF                               o o o o o o o o o o o o o o o o o o o o o o o                EB
+01                              IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII               CA
+01                      o o o                I                   EBBBBBBBBBBBBBF     o o o o  CA
+01                     IIIIIII               I                   CAAAAAAAAAAAAAD    o o o o o CA
+01                                           I             o o   CAAAAAAAAAAAAAHF    o o o o  CA
+01                                                        IIIII  CAAAAAAAAAAAAAAD   o o o o o CA
+01                      IIIII                                    CAAAAAAAAAAAAAAHF   IIIIIII  CA
+01                                                               CAAAAAAAAAAAAAAAD  o o o o o CA
+01  xxx           wwwwwwwwwwww       IIIIIIIIIIIII               CAAAAAAAAAAAAAAAHF  o o o o  CA
+01  x-x         EBBBBBBBBBBBBBBBF     o o o o o o           *    CAAAAAAAAAAAAAAAAD o o o o o CA
 AHBBBBBBBBBBBBBBGAAAAAAAAAAAAAAAHBBBBBBBBBBBBBBBBBBB03BBBBBBBBBBBGAAAAAAAAAAAAAAAAHBBBBBBBBBBBGA

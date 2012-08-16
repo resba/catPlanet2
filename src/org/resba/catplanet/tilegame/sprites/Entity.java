@@ -20,6 +20,7 @@ public abstract class Entity extends Sprite {
     public static final int STATE_NORMAL = 0;
     public static final int STATE_DYING = 1;
     public static final int STATE_DEAD = 2;
+    public static final int STATE_RESPAWN = 4;
 
     private Animation left;
     private Animation right;

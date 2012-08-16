@@ -5,21 +5,21 @@
 #   A..Z    Tiles A thr ugh Z
 #           Star
 #   *       Goal
-F                      D
-D                      B
-D                      B
-D    c                 B
-D   BBB                B
-D                      B
-D                      B
-D                 c    B
-D               BBB    B
-D                      B
-D                      B
-D                      B
-D                      B
-D            c         B
-D          BBB         B
-D                      B
-D  -  b cb  b  b       E
+F                    x02
+D                    x02
+D          x         x02
+D    c               x02
+D   BBB              x02
+D                    x02
+D                    x02
+D                c   x02
+D              BBB   x02
+Dd                   x02
+D                    x02
+D                    x02
+D                    x02
+D            c       x02
+D          BBB       x02
+D xxx                x02
+D x-x b cb  b  b     x02
 AHBBBBBBBBBBBBBBAAAAAAAA
