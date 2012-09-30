@@ -553,6 +553,12 @@ public class CatPlanetResourceManager extends ResourceManager {
             loadImage("spikes_left.png"),
             loadImage("spikes_right.png"),
             loadImage("foliage_grass.png"),
+            loadImage("player_1.png"),
+            loadImage("player_2.png"),
+            loadImage("player_3.png"),
+            loadImage("player_4.png"),
+            loadImage("player_fly_1.png"),
+            loadImage("player_fly_2.png"),
         };
 
         images[1] = new Image[images[0].length];
@@ -615,16 +621,24 @@ public class CatPlanetResourceManager extends ResourceManager {
         // create creature animations
         Animation[] playerAnim = new Animation[5];
         Animation[] catAnim = new Animation[5];
+        Animation[] catpAnim = new Animation[5];
         Animation[] tranAnim = new Animation[5];
         Animation[] spikeleftAnim = new Animation[5];
         Animation[] spikerightAnim = new Animation[5];
         Animation[] spikeupAnim = new Animation[5];
         Animation[] spikedownAnim = new Animation[5];
         Animation[] foliageAnim = new Animation[5];
+        Animation[] playerFlyAnim = new Animation[5];
         for (int i=0; i<4; i++) {
-            playerAnim[i] = createPlayerAnim(
+            catpAnim[i] = createCatPAnim(
                 images[i][0], images[i][1], images[i][2], images[i][3], images[i][4], images[i][5]);
             
+            playerFlyAnim[i] = createPlayerFlyAnim(
+            		images[i][16],images[i][17]);
+            
+            //12
+            playerAnim[i] = createPlayerAnim(
+            		images[i][12],images[i][13],images[i][14],images[i][15]);       
             tranAnim[i] = createTranAnim(images[i][6]);
             spikeleftAnim[i] = createSpikeAnim(images[i][9]);
             spikerightAnim[i] = createSpikeAnim(images[i][10]);
@@ -636,8 +650,8 @@ public class CatPlanetResourceManager extends ResourceManager {
         
         // create creature sprites
         playerSprite = new Player(playerAnim[1], playerAnim[0],
-            playerAnim[2], playerAnim[3]);
-        catPlanetCat = new CatPlanetCat(playerAnim[0], playerAnim[1], catAnim[4]);
+            playerAnim[2], playerAnim[3], playerFlyAnim[0], playerFlyAnim[1]);
+        catPlanetCat = new CatPlanetCat(catpAnim[0], catpAnim[1], catAnim[4]);
         transition = new Transition(tranAnim[0]);
         leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[1],spikeleftAnim[2],spikeleftAnim[3]);
         rightWallSpike = new Spike(spikerightAnim[0],spikerightAnim[1],spikerightAnim[2],spikerightAnim[3]);
@@ -648,18 +662,38 @@ public class CatPlanetResourceManager extends ResourceManager {
     }
 
 
-    private Animation createPlayerAnim(Image player1,
-        Image player2, Image player3, Image player4, Image player5, Image player6)
+    private Animation createCatPAnim(Image c1,
+        Image c2, Image c3, Image c4, Image c5, Image c6)
     {
         Animation anim = new Animation();
-        anim.addFrame(player1, 150);
-        anim.addFrame(player2, 150);
-        anim.addFrame(player1, 150);
-        anim.addFrame(player4, 150);
-        anim.addFrame(player5, 150);
-        anim.addFrame(player6, 150);
+        anim.addFrame(c1, 150);
+        anim.addFrame(c2, 150);
+        anim.addFrame(c1, 150);
+        anim.addFrame(c4, 150);
+        anim.addFrame(c5, 150);
+        anim.addFrame(c6, 150);
         return anim;
     }
+    
+    private Animation createPlayerAnim(Image player1,
+            Image player2, Image player3, Image player4)
+        {
+            Animation anim = new Animation();
+            anim.addFrame(player1, 150);
+            anim.addFrame(player2, 150);
+            anim.addFrame(player3, 150);
+            anim.addFrame(player4, 150);
+            return anim;
+        }
+    
+    private Animation createPlayerFlyAnim(Image player1,
+            Image player2)
+        {
+            Animation anim = new Animation();
+            anim.addFrame(player1, 150);
+            anim.addFrame(player2, 150);
+            return anim;
+        }
     
     private Animation createTranAnim(Image img1){
     	Animation anim = new Animation();

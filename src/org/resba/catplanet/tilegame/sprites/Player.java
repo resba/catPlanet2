@@ -10,11 +10,15 @@ public class Player extends Entity {
     private static final float JUMP_SPEED = -.30f;
 
     private boolean onGround;
+    private Animation flyingRight;
+    private Animation flyingLeft;
 
     public Player(Animation left, Animation right,
-        Animation deadLeft, Animation deadRight)
+        Animation deadLeft, Animation deadRight, Animation flyingLeft, Animation flyingRight)
     {
         super(left, right, deadLeft, deadRight);
+        this.flyingLeft = flyingLeft;
+        this.flyingRight = flyingRight;
     }
 
 
