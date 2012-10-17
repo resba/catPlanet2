@@ -650,7 +650,7 @@ public class CatPlanetResourceManager extends ResourceManager {
         
         // create creature sprites
         playerSprite = new Player(playerAnim[1], playerAnim[0],
-            playerAnim[2], playerAnim[3], playerFlyAnim[0], playerFlyAnim[1]);
+            playerAnim[2], playerAnim[3], playerFlyAnim[1], playerFlyAnim[0]);
         catPlanetCat = new CatPlanetCat(catpAnim[0], catpAnim[1], catAnim[4]);
         transition = new Transition(tranAnim[0]);
         leftWallSpike = new Spike(spikeleftAnim[0],spikeleftAnim[1],spikeleftAnim[2],spikeleftAnim[3]);

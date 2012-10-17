@@ -5,20 +5,20 @@ import org.resba.catplanet.graphics.Animation;
 /**
     The Player.
 */
-public class Player extends Entity {
+public class Player extends FlyingEntity {
 
     private static final float JUMP_SPEED = -.30f;
 
     private boolean onGround;
-    private Animation flyingRight;
-    private Animation flyingLeft;
+    
+    private boolean isJumping;
+
 
     public Player(Animation left, Animation right,
-        Animation deadLeft, Animation deadRight, Animation flyingLeft, Animation flyingRight)
+        Animation deadLeft, Animation deadRight, Animation flyLeft, Animation flyRight)
     {
-        super(left, right, deadLeft, deadRight);
-        this.flyingLeft = flyingLeft;
-        this.flyingRight = flyingRight;
+        super(left, right, deadLeft, deadRight, flyLeft, flyRight);
+        this.isJumping = false;
     }
 
 
@@ -70,6 +70,14 @@ public class Player extends Entity {
             onGround = true;
             setVelocityY(JUMP_SPEED);
         }
+    }
+    
+    public void setJump(boolean j){
+    	isJumping = j;
+    }
+    
+    public boolean getJump(){
+    	return this.isJumping;
     }
 
 

@@ -1,4 +1,4 @@
-# map02 for CatPlanet2 (http://www.resba.org/p/catplanet2)
+# map02 for CatPlanet2 (http://catplanet.resba.org/)
 # 
 # Map by resba (http://www.resba.org/)
 #

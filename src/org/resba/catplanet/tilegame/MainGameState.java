@@ -44,6 +44,8 @@ public class MainGameState implements GameState {
     private String stateChange;
     private Graphics2D g;
 
+    private long ti;
+    
     private GameAction moveLeft;
     private GameAction moveRight;
     private GameAction jump;
@@ -76,6 +78,8 @@ public class MainGameState implements GameState {
         	r.load();
 		} catch (IOException e) {
 		}
+    	
+    	ti = System.currentTimeMillis();
     	
     		cfg = new Configuration();
     }
@@ -156,7 +160,15 @@ public class MainGameState implements GameState {
         if (player.isAlive()) {
         	float velocityX = player.getVelocityX();
         	if(jump.isPressed()){
+        		player.setJump(true);
                 player.jump(true);
+                player.update(elapsedTime);
+                ti = System.currentTimeMillis();
+            }else if(!jump.isPressed()){
+            	if(System.currentTimeMillis() - ti > 500){
+            		player.setJump(false);
+                	player.update(elapsedTime);	
+            	}
             }
         	if(moveLeft.isPressed() || moveRight.isPressed()){
             if (moveLeft.isPressed()) {
@@ -317,7 +329,7 @@ public class MainGameState implements GameState {
         in the current map.
     */
     public void update(long elapsedTime) {
-        Entity player = (Entity)map.getPlayer();
+        FlyingEntity player = (FlyingEntity)map.getPlayer();
 
 
         // player is dead! start map over
@@ -334,7 +346,7 @@ public class MainGameState implements GameState {
         checkInput(elapsedTime);
 
         // update player
-        updateCreature(player, elapsedTime);
+        updateFlyingCreature(player, elapsedTime);
         player.update(elapsedTime);
 
         // update other sprites
@@ -406,9 +418,6 @@ public class MainGameState implements GameState {
             }
             creature.collideHorizontal();
         }
-        if (creature instanceof Player) {
-            checkPlayerCollision((Player)creature, false);
-        }
 
         // change y
         float dy = creature.getVelocityY();
@@ -431,12 +440,72 @@ public class MainGameState implements GameState {
             }
             creature.collideVertical();
         }
-        if (creature instanceof Player) {
-            boolean canKill = (oldY < creature.getY());
-            checkPlayerCollision((Player)creature, canKill);
-        }
 
     }
+    
+    private void updateFlyingCreature(FlyingEntity creature,
+            long elapsedTime)
+        {
+
+            // apply gravity
+            if (!creature.isFlying()) {
+                creature.setVelocityY(creature.getVelocityY() +
+                    GRAVITY * elapsedTime);
+            }
+
+            // change x
+            float dx = creature.getVelocityX();
+            float oldX = creature.getX();
+            float newX = oldX + dx * elapsedTime;
+            Point tile =
+                getTileCollision(creature, newX, creature.getY());
+            if (tile == null) {
+                creature.setX(newX);
+            }
+            else {
+                // line up with the tile boundary
+                if (dx > 0) {
+                    creature.setX(
+                        TileMapRenderer.tilesToPixels(tile.x) -
+                        creature.getWidth());
+                }
+                else if (dx < 0) {
+                    creature.setX(
+                        TileMapRenderer.tilesToPixels(tile.x + 1));
+                }
+                creature.collideHorizontal();
+            }
+            if (creature instanceof Player) {
+                checkPlayerCollision((Player)creature, false);
+            }
+
+            // change y
+            float dy = creature.getVelocityY();
+            float oldY = creature.getY();
+            float newY = oldY + dy * elapsedTime;
+            tile = getTileCollision(creature, creature.getX(), newY);
+            if (tile == null) {
+                creature.setY(newY);
+            }
+            else {
+                // line up with the tile boundary
+                if (dy > 0) {
+                    creature.setY(
+                        TileMapRenderer.tilesToPixels(tile.y) -
+                        creature.getHeight());
+                }
+                else if (dy < 0) {
+                    creature.setY(
+                        TileMapRenderer.tilesToPixels(tile.y + 1));
+                }
+                creature.collideVertical();
+            }
+            if (creature instanceof Player) {
+                boolean canKill = (oldY < creature.getY());
+                checkPlayerCollision((Player)creature, canKill);
+            }
+
+        }
 
 
     /**

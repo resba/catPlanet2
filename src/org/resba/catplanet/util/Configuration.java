@@ -21,6 +21,12 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
+	
+	//Developement thing
+	public boolean isDevelopment(){
+		return false;
+	}
+	
 	public void load() throws IOException{
 		String filename = "config/dev/config.txt";
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -53,8 +59,6 @@ public class Configuration {
 	    }
 	}
 	
-	public boolean isDevelopment(){
-		return false;
-	}
+
 	
 }
