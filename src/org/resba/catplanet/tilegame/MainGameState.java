@@ -192,11 +192,11 @@ public class MainGameState implements GameState {
     		}
         }else{
         	if(velocityX < 0.01999999 && velocityX > -0.01999999){
-        		//velocityX -= (-0.0001f);
+        		velocityX -= (-0.0001f);
         		velocityX = 0;
         	}
         	if(velocityX > 0){
-        		//velocityX += (-0.0001f);
+        		velocityX += (-0.0001f);
         	}
         	if(velocityX == 0){
         		velocityX = 0;
