@@ -82,7 +82,7 @@ public class Player extends FlyingEntity {
 
 
     public float getMaxSpeed() {
-        return 0.40f;
+        return 0.35f;
     }
 
 }
