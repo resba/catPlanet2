@@ -29,10 +29,10 @@ import org.resba.catplanet.util.CatCounter;
 */
 public class TileMapRenderer {
 
-    private static final int TILE_SIZE = 36;
+    private static final int TILE_SIZE = 16;
     // the size in bits of the tile
     // Math.pow(2, TILE_SIZE_BITS) == TILE_SIZE
-    private static final int TILE_SIZE_BITS = 6;
+    private static final int TILE_SIZE_BITS = 4;
 
     private Image background;
     private String label;
