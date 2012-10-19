@@ -24,7 +24,7 @@ public class Configuration {
 	
 	//Developement thing
 	public boolean isDevelopment(){
-		return false;
+		return true;
 	}
 	
 	public void load() throws IOException{

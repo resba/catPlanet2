@@ -58,8 +58,8 @@ D                                              D
 D                                              D
 D                                              D
 D                                              D
-t  f                                           D
-t f!f                                          D
-t BBB             c                          g D
-t      b  b  b                              g@gu
+t                                              D
+t                                              D
+t  f              c                          g D
+t f!f  b  b  b                              g@gu
 AHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA
