@@ -33,6 +33,7 @@ public class Player extends FlyingEntity {
 
     public void collideVertical() {
         // check if collided with ground
+    	
         if (getVelocityY() > 0) {
             onGround = true;
             setVelocityY(-(getVelocityY())-(-0.25f));

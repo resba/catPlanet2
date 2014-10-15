@@ -122,10 +122,10 @@ public abstract class GameCore {
             screen.update();
 
             // don't take a nap! run as fast as possible
-            /*try {
+            try {
                 Thread.sleep(20);
             }
-            catch (InterruptedException ex) { }*/
+            catch (InterruptedException ex) { }
         }
     }
 

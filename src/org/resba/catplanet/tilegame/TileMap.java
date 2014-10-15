@@ -126,7 +126,7 @@ public class TileMap {
     public Iterator getSprites() {
         return sprites.iterator();
     }
-    /*
+    
     public void addTexts(CatLabel lbl) {
         texts.add(lbl);
     }
@@ -142,5 +142,5 @@ public class TileMap {
     public Iterator getTexts() {
         return texts.iterator();
     }
-	*/
+	
 }

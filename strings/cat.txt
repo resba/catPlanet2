@@ -3,6 +3,6 @@
 #map01
 1556.0:1000.0:map01=Welcome to cat planet!
 1876.0:808.0:map01=We're back for more!
-1172.0:936.0:map02=Yahoo! I'm floating!
+1172.0:3048.0:map02=Yahoo! I'm floating!
 468.0:1000.0:map03=Watchout for spikes!
 1300.0:1000.0:map03=Yeowch! Spikes are dangerous!

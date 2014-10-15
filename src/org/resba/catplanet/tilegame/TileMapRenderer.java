@@ -29,11 +29,11 @@ import org.resba.catplanet.util.CatCounter;
 */
 public class TileMapRenderer {
 
-    private static final int TILE_SIZE = 16;
+    
     // the size in bits of the tile
     // Math.pow(2, TILE_SIZE_BITS) == TILE_SIZE
-    private static final int TILE_SIZE_BITS = 4;
-
+    private static final int TILE_SIZE_BITS = 6;
+    private static final int TILE_SIZE = (int) Math.pow(2, TILE_SIZE_BITS);
     private Image background;
     private String label;
     private float ex;
@@ -65,11 +65,11 @@ public class TileMapRenderer {
     */
     public static int pixelsToTiles(int pixels) {
         // use shifting to get correct values for negative pixels
-        return pixels >> TILE_SIZE_BITS;
+        //return pixels >> TILE_SIZE_BITS;
 
         // or, for tile sizes that aren't a power of two,
         // use the floor function:
-        //return (int)Math.floor((float)pixels / TILE_SIZE);
+        return (int)Math.floor((float)pixels / TILE_SIZE);
     }
 
 

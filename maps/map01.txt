@@ -21,38 +21,9 @@
 :z=aa
 #
 BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
-D                                                                  D
-D                                                                  D                                                                  D
+D                                                                  D                                                             D
 D                                                        c         t
 D                                                      BBB       f t
-D                                                               f!ft
-D -   b cb  b  b                                                 f t
+D -                                                             f!ft
+D     b cb  b  b                                                 f t
 AHBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA
