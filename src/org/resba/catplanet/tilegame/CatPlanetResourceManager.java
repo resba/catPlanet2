@@ -198,13 +198,16 @@ public class CatPlanetResourceManager extends ResourceManager {
                 break;
             }
 
-            // add every line except for comments
-            if (!line.startsWith("#")) {
+            // comments are skipped; ":key=value" lines are map
+            // directives (transition targets, spawn mode) and must not
+            // become tile rows
+            if (line.startsWith("#")) {
+                continue;
+            }
+            if (!line.startsWith(":")) {
                 lines.add(line);
                 width = Math.max(width, line.length());
-                System.out.println(width+"");
             }
-            //System.out.println("hi");
             if(line.startsWith(":")){
             	if(line.split("=")[0].contains(":t")){
             		 tR = line.split("=")[1].charAt(0);

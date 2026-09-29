@@ -34,7 +34,6 @@ public class Sprite {
         x += dx * elapsedTime;
         y += dy * elapsedTime;
         anim.update(elapsedTime);
-        ID = this.getX()+":"+this.getY()+":"+this.getCurrentMap();
     }
 
     /**
@@ -143,12 +142,7 @@ public class Sprite {
     }
 
     public void canRave(boolean t){
-    	if (t){
-    		raver = t;
-    	}
-    	if(!t){
-    		raver = t;
-    	}
+        raver = t;
     }
     
     /**
@@ -178,13 +172,20 @@ public class Sprite {
     }
     
     /**
-     * ID is set automatically upon creation of the entity.
+     * ID is assigned when the sprite is placed on a map (see
+     * {@link #updateID()}). It is derived from the spawn position and
+     * map name so that it matches the keys in strings/cat.txt.
      * @return ID of entity
      */
     public String getID(){
     	return this.ID;
     }
-    
+
+    /**
+     * Recomputes the ID from the current position and map. Call this
+     * once after positioning the sprite; the ID is intentionally not
+     * refreshed every frame.
+     */
     public void updateID(){
     	this.ID = this.getX()+":"+this.getY()+":"+this.getCurrentMap();
     }

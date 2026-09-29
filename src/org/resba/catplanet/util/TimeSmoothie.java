@@ -83,7 +83,7 @@ public class TimeSmoothie {
             // if the average period is already reached, go ahead and return
             // the average.
             if (sum >= AVERAGE_PERIOD) {
-                Math.round((double)sum / (numSamples-i));
+                return Math.round((double)sum / (numSamples-i));
             }
         }
         return Math.round((double)sum / numSamples);

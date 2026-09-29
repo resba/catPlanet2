@@ -11,9 +11,9 @@ public class GameStateManager {
 
     public static final String EXIT_GAME = "_ExitGame";
 
-    private Map gameStates;
+    private Map<String, GameState> gameStates;
     private Image defaultImage;
-    private GameState currentState;
+    private volatile GameState currentState;
     private InputManager inputManager;
     private boolean done;
 
@@ -22,21 +22,19 @@ public class GameStateManager {
     {
         this.inputManager = inputManager;
         this.defaultImage = defaultImage;
-        gameStates = new HashMap();
+        gameStates = new HashMap<String, GameState>();
     }
 
     public void addState(GameState state) {
         gameStates.put(state.getName(), state);
     }
 
-    public Iterator getStates() {
+    public Iterator<GameState> getStates() {
         return gameStates.values().iterator();
     }
 
     public void loadAllResources(ResourceManager resourceManager) {
-        Iterator i = getStates();
-        while (i.hasNext()) {
-            GameState gameState = (GameState)i.next();
+        for (GameState gameState : gameStates.values()) {
             gameState.loadResources(resourceManager);
         }
     }
@@ -50,46 +48,42 @@ public class GameStateManager {
     /**
         Sets the current state (by name).
     */
-    public void setState(String name) {
+    public synchronized void setState(String name) {
         // clean up old state
         if (currentState != null) {
             currentState.stop();
         }
         inputManager.clearAllMaps();
 
-        if (name == EXIT_GAME) {
+        if (EXIT_GAME.equals(name)) {
             done = true;
         }
         else {
-
             // set new state
-            currentState = (GameState)gameStates.get(name);
-            if (currentState != null) {
-                currentState.start(inputManager);
+            GameState next = gameStates.get(name);
+            if (next != null) {
+                next.start(inputManager);
             }
+            currentState = next;
         }
     }
 
 
     /**
-        Updates world, handles input.
+        Updates world, handles input. Does nothing until a state has
+        been set (the game loop already paces itself).
     */
     public void update(long elapsedTime) {
-        // if no state, pause a short time
-        if (currentState == null) {
-            try {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException ex) { }
+        GameState state = currentState;
+        if (state == null) {
+            return;
+        }
+        String nextState = state.checkForStateChange();
+        if (nextState != null) {
+            setState(nextState);
         }
         else {
-            String nextState = currentState.checkForStateChange();
-            if (nextState != null) {
-                setState(nextState);
-            }
-            else {
-                currentState.update(elapsedTime);
-            }
+            state.update(elapsedTime);
         }
     }
 
@@ -98,8 +92,9 @@ public class GameStateManager {
         Draws to the screen.
     */
     public void draw(Graphics2D g) {
-        if (currentState != null) {
-            currentState.draw(g);
+        GameState state = currentState;
+        if (state != null) {
+            state.draw(g);
         }
         else {
             // if no state, draw the default image to the screen

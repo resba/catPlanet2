@@ -6,100 +6,91 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.*;
 
-import org.resba.catplanet.catmonitor.CatMonitor;
-
 
 
 /**
-    The ScreenManager class manages initializing and displaying
-    full screen graphics modes.
+    The ScreenManager owns the game window and the double-buffered
+    surface the game draws on.
+
+    <p>The game renders into a fixed-size Canvas inside a JFrame rather
+    than onto the frame itself, so the drawable area is exactly
+    WIDTH x HEIGHT regardless of window decorations, and keyboard input
+    is taken from that canvas.
 */
 public class ScreenManager {
 
-    private GraphicsDevice device;
-    private JFrame j;
-    private JFrame stat;
-    private JPanel holder;
-    
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
+
+    private final JFrame frame;
+    private final Canvas canvas;
+
 
     /**
-        Creates a new ScreenManager object.
+        Creates the (still hidden) window and canvas.
     */
     public ScreenManager() {
-        GraphicsEnvironment environment =
-            GraphicsEnvironment.getLocalGraphicsEnvironment();
-        j = new JFrame();
-        stat = new JFrame();
-        holder = new JPanel();
+        frame = new JFrame();
+        canvas = new Canvas();
+        canvas.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        canvas.setSize(WIDTH, HEIGHT);
+        canvas.setIgnoreRepaint(true);
+        canvas.setFocusable(true);
+        canvas.setBackground(Color.black);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setIgnoreRepaint(true);
+        frame.setLayout(new BorderLayout());
+        frame.add(canvas, BorderLayout.CENTER);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 
 
     /**
-        Returns a list of compatible display modes for the
-        default device on the system.
+        Returns the game window. The name is historical: the game runs
+        in a fixed-size window rather than exclusive full screen mode.
     */
-    public DisplayMode[] getCompatibleDisplayModes() {
-        return device.getDisplayModes();
+    public JFrame getFullScreenWindow() {
+        return frame;
     }
 
 
     /**
-        Returns the first compatible mode in a list of modes.
-        Returns null if no modes are compatible.
+        The component that receives keyboard and mouse input.
     */
-    public DisplayMode findFirstCompatibleMode(
-        DisplayMode modes[])
-    {
-        DisplayMode goodModes[] = device.getDisplayModes();
-        for (int i = 0; i < modes.length; i++) {
-            for (int j = 0; j < goodModes.length; j++) {
-                if (displayModesMatch(modes[i], goodModes[j])) {
-                    return modes[i];
-                }
+    public Component getInputComponent() {
+        return canvas;
+    }
+
+
+    /**
+        Shows the window and creates the double buffer.
+    */
+    public void setupBuffering(){
+        Runnable setup = new Runnable() {
+            public void run() {
+                frame.setVisible(true);
+                canvas.setFont(frame.getFont());
+                canvas.setForeground(frame.getForeground());
+                canvas.createBufferStrategy(2);
+                canvas.requestFocusInWindow();
             }
-
+        };
+        if (EventQueue.isDispatchThread()) {
+            setup.run();
+            return;
         }
-
-        return null;
-    }
-
-
-    /**
-        Determines if two display modes "match". Two display
-        modes match if they have the same resolution, bit depth,
-        and refresh rate. The bit depth is ignored if one of the
-        modes has a bit depth of DisplayMode.BIT_DEPTH_MULTI.
-        Likewise, the refresh rate is ignored if one of the
-        modes has a refresh rate of
-        DisplayMode.REFRESH_RATE_UNKNOWN.
-    */
-    public boolean displayModesMatch(DisplayMode mode1,
-        DisplayMode mode2)
-
-    {
-        if (mode1.getWidth() != mode2.getWidth() ||
-            mode1.getHeight() != mode2.getHeight())
-        {
-            return false;
+        try {
+            EventQueue.invokeAndWait(setup);
         }
-
-        if (mode1.getBitDepth() != DisplayMode.BIT_DEPTH_MULTI &&
-            mode2.getBitDepth() != DisplayMode.BIT_DEPTH_MULTI &&
-            mode1.getBitDepth() != mode2.getBitDepth())
-        {
-            return false;
+        catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
         }
-
-        if (mode1.getRefreshRate() !=
-            DisplayMode.REFRESH_RATE_UNKNOWN &&
-            mode2.getRefreshRate() !=
-            DisplayMode.REFRESH_RATE_UNKNOWN &&
-            mode1.getRefreshRate() != mode2.getRefreshRate())
-         {
-             return false;
-         }
-
-         return true;
+        catch (InvocationTargetException  ex) {
+            throw new IllegalStateException("Could not create window", ex);
+        }
     }
 
 
@@ -111,136 +102,65 @@ public class ScreenManager {
         The application must dispose of the graphics object.
     */
     public Graphics2D getGraphics() {
-        Window window = j;
-        if (window != null) {
-            BufferStrategy strategy = window.getBufferStrategy();
-            return (Graphics2D)strategy.getDrawGraphics();
-        }
-        else {
+        BufferStrategy strategy = canvas.getBufferStrategy();
+        if (strategy == null) {
             return null;
         }
+        return (Graphics2D)strategy.getDrawGraphics();
     }
 
 
     /**
-        Updates the display.
+        Flips the buffer to show what was drawn since getGraphics().
     */
     public void update() {
-
+        BufferStrategy strategy = canvas.getBufferStrategy();
+        if (strategy != null && !strategy.contentsLost()) {
+            strategy.show();
+        }
         // Sync the display on some systems.
         // (on Linux, this fixes event queue problems)
-        Window window = j;
-        if (window != null) {
-            BufferStrategy strategy = window.getBufferStrategy();
-            if (!strategy.contentsLost()) {
-                strategy.show();
-                window.update(this.getGraphics());
-            }
-        }
-    }
-    public void initStatScreen(){
-        stat.setTitle("CatScreen (tm)");
-        stat.setLocation(0, 600);
-        stat.setSize(800,100);
-        stat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        holder.setBackground(Color.black);
-        holder.setLayout(new GridLayout(0,2,0,0));
-        holder.setPreferredSize(new Dimension(800, 100));
-        holder.setSize(800,100);
-        stat.setContentPane(holder);
-        stat.setVisible(true);
-        holder.setVisible(true);
+        Toolkit.getDefaultToolkit().sync();
     }
 
 
     /**
-        Returns the window currently used in full screen mode.
-        Returns null if the device is not in full screen mode.
-    */
-    public JFrame getFullScreenWindow() {
-        j.pack();
-        j.setVisible(true);
-        j.setSize(800, 600);
-        return j;
-    }
-
-    public void setupBuffering(){
-        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        j.setIgnoreRepaint(true);
-        j.setResizable(false);
-        try {
-            EventQueue.invokeAndWait(new Runnable() {
-                public void run() {
-                    j.createBufferStrategy(2);
-                }
-            });
-        }
-        catch (InterruptedException ex) {
-            // ignore
-        }
-        catch (InvocationTargetException  ex) {
-            // ignore
-        }
-    }
-
-    /**
-        Returns the width of the window currently used in full
-        screen mode. Returns 0 if the device is not in full
-        screen mode.
+        Width of the drawable area in pixels.
     */
     public int getWidth() {
-        Window window = j;
-        if (window != null) {
-            return window.getWidth();
-        }
-        else {
-            return 800;
-        }
+        return WIDTH;
     }
 
 
     /**
-        Returns the height of the window currently used in full
-        screen mode. Returns 0 if the device is not in full
-        screen mode.
+        Height of the drawable area in pixels.
     */
     public int getHeight() {
-        Window window = j;
-        if (window != null) {
-            return window.getHeight();
-        }
-        else {
-            return 800;
-        }
+        return HEIGHT;
     }
 
 
     /**
-        Restores the screen's display mode.
+        Closes the window.
     */
     public void restoreScreen() {
-        Window window = j;
-        if (window != null) {
-            window.dispose();
-        }
-        window.setSize(800, 800);
+        frame.dispose();
     }
 
     public void setTitle(String title){
-        j.setTitle(title);
+        frame.setTitle(title);
     }
+
     /**
         Creates an image compatible with the current display.
     */
     public BufferedImage createCompatibleImage(int w, int h,
         int transparancy)
     {
-        Window window = j;
-        if (window != null) {
-            GraphicsConfiguration gc =
-                window.getGraphicsConfiguration();
-            return gc.createCompatibleImage(w, h, transparancy);
+        GraphicsConfiguration gc = canvas.getGraphicsConfiguration();
+        if (gc == null) {
+            gc = frame.getGraphicsConfiguration();
         }
-        return null;
+        return gc.createCompatibleImage(w, h, transparancy);
     }
 }
