@@ -52,8 +52,16 @@ public class Recorder {
 	    }
 	}
 	
+	/**
+	 * Text for the cat with the given ID, or a placeholder when
+	 * strings/cat.txt has no entry for it.
+	 */
 	public String getStringByID(String ID){
-		return lines.get(ids.indexOf(ID));
+		int index = ids.indexOf(ID);
+		if (index < 0) {
+			return "...";
+		}
+		return lines.get(index);
 	}
 	
 	public void setInfiniteRave(String ID){
@@ -63,7 +71,7 @@ public class Recorder {
 	
 	public boolean stillRaving(String ID){
 		try{
-		if(switches.get(switchids.indexOf(ID)) == "1"){
+		if("1".equals(switches.get(switchids.indexOf(ID)))){
 			return true;
 		}else{
 			return false;

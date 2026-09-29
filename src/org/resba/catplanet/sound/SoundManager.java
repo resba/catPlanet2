@@ -29,6 +29,7 @@ public class SoundManager extends ThreadPool {
     private ThreadLocal localBuffer;
     private Object pausedLock;
     private boolean paused;
+    private final boolean enabled;
 
     /**
         Creates a new SoundManager using the maximum number of
@@ -50,6 +51,8 @@ public class SoundManager extends ThreadPool {
         super(Math.min(maxSimultaneousSounds,
             getMaxSimultaneousSounds(playbackFormat)));
         this.playbackFormat = playbackFormat;
+        this.enabled = Math.min(maxSimultaneousSounds,
+            getMaxSimultaneousSounds(playbackFormat)) > 0;
         localLine = new ThreadLocal();
         localBuffer = new ThreadLocal();
         pausedLock = new Object();
@@ -69,8 +72,17 @@ public class SoundManager extends ThreadPool {
     {
         DataLine.Info lineInfo = new DataLine.Info(
             SourceDataLine.class, playbackFormat);
-        Mixer mixer = AudioSystem.getMixer(null);
-        return mixer.getMaxLines(lineInfo);
+        try {
+            Mixer mixer = AudioSystem.getMixer(null);
+            int lines = mixer.getMaxLines(lineInfo);
+            // AudioSystem.NOT_SPECIFIED means "unlimited"
+            return lines == AudioSystem.NOT_SPECIFIED ? Integer.MAX_VALUE : lines;
+        }
+        catch (IllegalArgumentException | SecurityException ex) {
+            // no audio device on this machine: run silently
+            System.err.println("No audio mixer available, sound disabled: " + ex.getMessage());
+            return 0;
+        }
     }
 
 
@@ -82,9 +94,17 @@ public class SoundManager extends ThreadPool {
         setPaused(false);
 
         // close the mixer (stops any running sounds)
-        Mixer mixer = AudioSystem.getMixer(null);
-        if (mixer.isOpen()) {
-            mixer.close();
+        if (!enabled) {
+            return;
+        }
+        try {
+            Mixer mixer = AudioSystem.getMixer(null);
+            if (mixer.isOpen()) {
+                mixer.close();
+            }
+        }
+        catch (IllegalArgumentException ex) {
+            // no mixer; nothing to close
         }
     }
 
@@ -264,7 +284,7 @@ public class SoundManager extends ThreadPool {
         sound filter. This method returns immediately.
     */
     public InputStream play(InputStream is, SoundFilter filter) {
-        if (is != null) {
+        if (is != null && enabled) {
             if (filter != null) {
                 is = new FilteredSoundStream(is, filter);
             }

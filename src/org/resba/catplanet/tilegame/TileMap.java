@@ -1,9 +1,9 @@
 package org.resba.catplanet.tilegame;
 
 import java.awt.Image;
-import java.awt.Label;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.resba.catplanet.graphics.Sprite;
 import org.resba.catplanet.util.CatLabel;
@@ -19,9 +19,9 @@ import org.resba.catplanet.util.CatLabel;
 public class TileMap {
 
     private Image[][] tiles;
-    private LinkedList sprites;
+    private List<Sprite> sprites;
     private Sprite player;
-    private LinkedList texts;
+    private List<CatLabel> texts;
 
     /**
         Creates a new TileMap with the specified width and
@@ -29,8 +29,8 @@ public class TileMap {
     */
     public TileMap(int width, int height) {
         tiles = new Image[width][height];
-        sprites = new LinkedList();
-        texts = new LinkedList();
+        sprites = new ArrayList<Sprite>();
+        texts = new ArrayList<CatLabel>();
     }
 
 
@@ -89,7 +89,7 @@ public class TileMap {
     public void setPlayer(Sprite player) {
         this.player = player;
     }
-    
+
     public void setPlayerCoordinates(Sprite player, int x, int y){
         player.setX(
                 TileMapRenderer.tilesToPixels(x) +
@@ -116,17 +116,23 @@ public class TileMap {
     */
     public void removeSprite(Sprite sprite) {
         sprites.remove(sprite);
-
     }
 
     /**
         Gets an Iterator of all the Sprites in this map,
-        excluding the player Sprite.
+        excluding the player Sprite. Supports remove().
     */
-    public Iterator getSprites() {
+    public Iterator<Sprite> getSprites() {
         return sprites.iterator();
     }
-    
+
+    /**
+        Read-only view of the sprites for simple for-each loops.
+    */
+    public List<Sprite> getSpriteList() {
+        return java.util.Collections.unmodifiableList(sprites);
+    }
+
     public void addTexts(CatLabel lbl) {
         texts.add(lbl);
     }
@@ -136,11 +142,11 @@ public class TileMap {
     }
 
     public CatLabel findTexts(int index){
-    	return (CatLabel)texts.get(index);
+    	return texts.get(index);
     }
-    
-    public Iterator getTexts() {
+
+    public Iterator<CatLabel> getTexts() {
         return texts.iterator();
     }
-	
+
 }

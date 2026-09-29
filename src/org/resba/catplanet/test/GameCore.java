@@ -14,19 +14,12 @@ public abstract class GameCore {
 
     protected static final int FONT_SIZE = 12;
 
-    private static final DisplayMode POSSIBLE_MODES[] = {
-        new DisplayMode(800, 600, 16, 0),
-        new DisplayMode(800, 600, 32, 0),
-        new DisplayMode(800, 600, 24, 0),
-        new DisplayMode(640, 480, 16, 0),
-        new DisplayMode(640, 480, 32, 0),
-        new DisplayMode(640, 480, 24, 0),
-        new DisplayMode(1024, 768, 16, 0),
-        new DisplayMode(1024, 768, 32, 0),
-        new DisplayMode(1024, 768, 24, 0),
-    };
+    /** Frames per second the render loop aims for. */
+    protected static final int TARGET_FPS = 60;
 
-    private boolean isRunning;
+    private static final long TARGET_FRAME_NS = 1_000_000_000L / TARGET_FPS;
+
+    private volatile boolean isRunning;
     protected ScreenManager screen;
 
 
@@ -49,7 +42,9 @@ public abstract class GameCore {
         	e.printStackTrace();
         }
         finally {
-            screen.restoreScreen();
+            if (screen != null) {
+                screen.restoreScreen();
+            }
             lazilyExit();
         }
     }
@@ -80,14 +75,14 @@ public abstract class GameCore {
 
 
     /**
-        Sets full screen mode and initiates and objects.
+        Creates the window and initialises objects.
     */
     public void init() {
         screen = new ScreenManager();
 
         Window window = screen.getFullScreenWindow();
         window.setFont(new Font("Dialog", Font.PLAIN, FONT_SIZE));
-        window.setBackground(Color.blue);
+        window.setBackground(Color.black);
         window.setForeground(Color.white);
         screen.setTitle("Cat Planet Cat Planet: More Cat per Planet than the leading Planet.");
         screen.setupBuffering();
@@ -102,30 +97,47 @@ public abstract class GameCore {
 
     /**
         Runs through the game loop until stop() is called.
+
+        <p>Uses the monotonic nanosecond clock and paces frames to
+        TARGET_FPS, sleeping only for whatever is left of the frame.
+        Sub-millisecond remainders are carried over so the elapsed
+        time handed to update() adds up to real time.
     */
     public void gameLoop() {
-        long startTime = System.currentTimeMillis();
-        long currTime = startTime;
+        long lastTime = System.nanoTime();
 
         while (isRunning) {
-            long elapsedTime =
-                System.currentTimeMillis() - currTime;
-            currTime += elapsedTime;
+            long frameStart = System.nanoTime();
+            long elapsedTime = (frameStart - lastTime) / 1_000_000L;
+            lastTime += elapsedTime * 1_000_000L;
 
             // update
             update(elapsedTime);
 
             // draw the screen
             Graphics2D g = screen.getGraphics();
-            draw(g);
-            g.dispose();
-            screen.update();
-
-            // don't take a nap! run as fast as possible
-            try {
-                Thread.sleep(20);
+            if (g != null) {
+                try {
+                    draw(g);
+                }
+                finally {
+                    g.dispose();
+                }
+                screen.update();
             }
-            catch (InterruptedException ex) { }
+
+            // pace to the target frame rate
+            long sleepNs = TARGET_FRAME_NS - (System.nanoTime() - frameStart);
+            if (sleepNs > 0) {
+                try {
+                    Thread.sleep(sleepNs / 1_000_000L,
+                        (int)(sleepNs % 1_000_000L));
+                }
+                catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
         }
     }
 

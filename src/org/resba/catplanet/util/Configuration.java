@@ -22,9 +22,13 @@ public class Configuration {
 		}
 	}
 	
-	//Developement thing
+	/**
+	 * True when the packaged config says cat-dev=true. In development
+	 * mode the HUD shows physics readouts and cats display their ID
+	 * instead of their line of text.
+	 */
 	public boolean isDevelopment(){
-		return true;
+		return catDev;
 	}
 	
 	public void load() throws IOException{
@@ -34,6 +38,9 @@ public class Configuration {
 	    if (url == null) {
 	    	filename = "config/production/config.txt";
 	    	url = classLoader.getResource(filename);
+	    }
+	    if (url == null) {
+	    	throw new IOException("No configuration file found");
 	    }
 
 	    // read every line in the text file into the list
@@ -47,14 +54,13 @@ public class Configuration {
 	            break;
 	        }
 	        
-	        if (!line.startsWith("#")) {
-	            if(line.split("=")[0] == "cat-dev"){
-	            	if(line.split("=")[1] == "true"){
-	            	this.catDev = true;
-	            }else{
-	            	this.catDev = false;
-	           	}
-	           }
+	        line = line.trim();
+	        if (!line.startsWith("#") && line.contains("=")) {
+	            String key = line.substring(0, line.indexOf('=')).trim();
+	            String value = line.substring(line.indexOf('=') + 1).trim();
+	            if ("cat-dev".equals(key)) {
+	                this.catDev = "true".equalsIgnoreCase(value);
+	            }
 	        }
 	    }
 	}

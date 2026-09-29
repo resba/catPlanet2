@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
-import javax.swing.*;
 
 import org.resba.catplanet.graphics.*;
 import org.resba.catplanet.input.*;
@@ -14,19 +13,19 @@ import org.resba.catplanet.sound.*;
 import org.resba.catplanet.state.*;
 import org.resba.catplanet.tilegame.sprites.*;
 import org.resba.catplanet.util.CatCounter;
-import org.resba.catplanet.util.CatLabel;
 import org.resba.catplanet.util.Recorder;
 import org.resba.catplanet.util.Configuration;
-
-
 
 
 public class MainGameState implements GameState {
 
     private static final int DRUM_TRACK = 1;
 
-    public static final float GRAVITY = 0.0008f;
-
+    /**
+        Falling this many pixels below the bottom of the map counts as
+        dying (maps are expected to have floors, this is a safety net).
+    */
+    private static final int OUT_OF_WORLD_MARGIN = 256;
 
     private SoundManager soundManager;
     private MidiPlayer midiPlayer;
@@ -34,28 +33,22 @@ public class MainGameState implements GameState {
     private int width;
     private int height;
 
-    private Point pointCache = new Point();
     private Sound prizeSound;
     private Sound boopSound;
     private Sequence music;
     private TileMap map;
     private TileMapRenderer renderer;
+    private Physics physics;
 
     private String stateChange;
-    private Graphics2D g;
 
-    private long ti;
-    
     private GameAction moveLeft;
     private GameAction moveRight;
     private GameAction jump;
     private GameAction exit;
-    private long timer;
-    
+
     private Recorder r;
     private Configuration cfg;
-
-    private float playerVX;
 
     public MainGameState(SoundManager soundManager,
         MidiPlayer midiPlayer, int width, int height)
@@ -66,22 +59,23 @@ public class MainGameState implements GameState {
         this.height = height;
         moveLeft = new GameAction("moveLeft");
         moveRight = new GameAction("moveRight");
-        jump = new GameAction("jump",
-            GameAction.DETECT_INITAL_PRESS_ONLY);
+        // NORMAL behaviour so the player can tell held from tapped
+        // (edge detection lives in Player.control)
+        jump = new GameAction("jump");
         exit = new GameAction("exit",
             GameAction.DETECT_INITAL_PRESS_ONLY);
 
         renderer = new TileMapRenderer();
         toggleDrumPlayback();
-    	try {
-        	r = new Recorder();
-        	r.load();
-		} catch (IOException e) {
-		}
-    	
-    	ti = System.currentTimeMillis();
-    	
-    		cfg = new Configuration();
+        r = new Recorder();
+        try {
+            r.load();
+        } catch (IOException e) {
+            System.err.println("Could not load cat strings: " + e.getMessage());
+        }
+
+        cfg = new Configuration();
+        renderer.setDebug(cfg.isDevelopment());
     }
 
     public String getName() {
@@ -92,13 +86,12 @@ public class MainGameState implements GameState {
     public String checkForStateChange() {
         return stateChange;
     }
-    
+
     public void setBackground(String bg){
     	renderer.setBackground(resourceManager.loadImage(bg));
     }
 
     public void loadResources(ResourceManager resManager) {
-    	
         resourceManager = (CatPlanetResourceManager)resManager;
 
         resourceManager.loadResources();
@@ -107,7 +100,7 @@ public class MainGameState implements GameState {
             resourceManager.loadImage("background0.png"));
 
         // load first map
-        map = resourceManager.loadFirstMap();
+        setMap(resourceManager.loadFirstMap());
 
         // load sounds
         prizeSound = resourceManager.loadSound("sounds/prize.wav");
@@ -117,9 +110,12 @@ public class MainGameState implements GameState {
 
     public void start(InputManager inputManager) {
         inputManager.mapToKey(moveLeft, KeyEvent.VK_LEFT);
+        inputManager.mapToKey(moveLeft, KeyEvent.VK_A);
         inputManager.mapToKey(moveRight, KeyEvent.VK_RIGHT);
+        inputManager.mapToKey(moveRight, KeyEvent.VK_D);
         inputManager.mapToKey(jump, KeyEvent.VK_SPACE);
         inputManager.mapToKey(jump, KeyEvent.VK_UP);
+        inputManager.mapToKey(jump, KeyEvent.VK_W);
         inputManager.mapToKey(exit, KeyEvent.VK_ESCAPE);
 
         soundManager.setPaused(false);
@@ -135,7 +131,9 @@ public class MainGameState implements GameState {
 
 
     public void draw(Graphics2D g) {
-        renderer.draw(g, map, width, height);
+        if (map != null) {
+            renderer.draw(g, map, width, height);
+        }
     }
 
 
@@ -150,121 +148,48 @@ public class MainGameState implements GameState {
         }
     }
 
-    private void checkInput(long elapsedTime) {
 
+    /**
+        Swaps in a new map (or keeps the old one if loading failed).
+    */
+    private void setMap(TileMap newMap) {
+        if (newMap == null) {
+            System.err.println("Map failed to load; keeping current map.");
+            return;
+        }
+        map = newMap;
+        if (physics == null) {
+            physics = new Physics(map);
+        }
+        else {
+            physics.setMap(map);
+        }
+    }
+
+
+    private void reloadMap() {
+        renderer.removeAllText();
+        setMap(resourceManager.reloadMap());
+    }
+
+
+    private void checkInput(long elapsedTime) {
         if (exit.isPressed()) {
             stateChange = GameStateManager.EXIT_GAME;
             return;
         }
         Player player = (Player)map.getPlayer();
         if (player.isAlive()) {
-        	float velocityX = player.getVelocityX();
-        	if(jump.isPressed()){
-        		player.setJump(true);
-                player.jump(true);
-                player.update(elapsedTime);
-                ti = System.currentTimeMillis();
-            }else if(!jump.isPressed()){
-            	if(System.currentTimeMillis() - ti > 500){
-            		player.setJump(false);
-                	player.update(elapsedTime);	
-            	}
-            }
-        	if(moveLeft.isPressed() || moveRight.isPressed()){
-            if (moveLeft.isPressed()) {
-            	
-            	velocityX += (-0.039f);
-            	
-            }
-            if (moveRight.isPressed()) {
-            
-            	velocityX -= (-0.039f);
-            	
-            }
-            if (moveLeft.isPressed() && moveRight.isPressed()){
-        			//velocityX = 0;
-            }
-    		if(velocityX > player.getMaxSpeed()){
-    			velocityX = player.getMaxSpeed() + 0.039f;
-    		}
-    		if(velocityX < -(player.getMaxSpeed())){
-    			velocityX = -(player.getMaxSpeed() + 0.039f);
-    		}
-        }else{
-        	if(velocityX < 0.01999999 && velocityX > -0.01999999){
-        		velocityX -= (-0.0001f);
-        		velocityX = 0;
-        	}
-        	if(velocityX > 0){
-        		velocityX += (-0.0001f);
-        	}
-        	if(velocityX == 0){
-        		velocityX = 0;
-        	}
-            if(velocityX > player.getMaxSpeed()){
-               velocityX = player.getMaxSpeed();
-            }
-            if(velocityX < -(player.getMaxSpeed())){
-                velocityX = -(player.getMaxSpeed());
-            }
+            player.control(moveLeft.isPressed(), moveRight.isPressed(),
+                jump.isPressed(), elapsedTime);
         }
-
-            player.setVelocityX(velocityX);
-        }
-
-    }
-
-    private void notePlayerX(float x){
-         this.playerVX = x;
-    }
-
-    public float getPlayerNotedX(){
-         return playerVX;
-    }
-
-    /**
-        Gets the tile that a Sprites collides with. Only the
-        Sprite's X or Y should be changed, not both. Returns null
-        if no collision is detected.
-    */
-    public Point getTileCollision(Sprite sprite,
-        float newX, float newY)
-    {
-        float fromX = Math.min(sprite.getX(), newX);
-        float fromY = Math.min(sprite.getY(), newY);
-        float toX = Math.max(sprite.getX(), newX);
-        float toY = Math.max(sprite.getY(), newY);
-
-        // get the tile locations
-        int fromTileX = TileMapRenderer.pixelsToTiles(fromX);
-        int fromTileY = TileMapRenderer.pixelsToTiles(fromY);
-        int toTileX = TileMapRenderer.pixelsToTiles(
-            toX + sprite.getWidth() - 1);
-        int toTileY = TileMapRenderer.pixelsToTiles(
-            toY + sprite.getHeight() - 1);
-
-        // check each tile for a collision
-        for (int x=fromTileX; x<=toTileX; x++) {
-            for (int y=fromTileY; y<=toTileY; y++) {
-                if (x < 0 || x >= map.getWidth() ||
-                    map.getTile(x, y) != null)
-                {
-                    // collision found, return the tile
-                    pointCache.setLocation(x, y);
-                    return pointCache;
-                }
-            }
-        }
-
-        // no collision found
-        return null;
     }
 
 
     /**
         Checks if two Sprites collide with one another. Returns
         false if the two Sprites are the same. Returns false if
-        one of the Sprites is a Creature that is not alive.
+        one of the Sprites is an Entity that is not alive.
     */
     public boolean isCollision(Sprite s1, Sprite s2) {
         // if the Sprites are the same, return false
@@ -272,7 +197,7 @@ public class MainGameState implements GameState {
             return false;
         }
 
-        // if one of the Sprites is a dead Creature, return false
+        // if one of the Sprites is a dead Entity, return false
         if (s1 instanceof Entity && !((Entity)s1).isAlive()) {
             return false;
         }
@@ -299,22 +224,15 @@ public class MainGameState implements GameState {
         or null if no Sprite collides with the specified Sprite.
     */
     public Sprite getSpriteCollision(Sprite sprite) {
-
-        // run through the list of Sprites
-        Iterator i = map.getSprites();
-        while (i.hasNext()) {
-            Sprite otherSprite = (Sprite)i.next();
+        for (Sprite otherSprite : map.getSpriteList()) {
             if (isCollision(sprite, otherSprite)) {
-                // collision found, return the Sprite
                 return otherSprite;
             }
         }
-
-        // no collision found
         return null;
     }
 
-    
+
     public void respawnPlayer(Respawn r, Player p){
     	p.setX(r.getX());
     	p.setY(r.getY());
@@ -329,188 +247,102 @@ public class MainGameState implements GameState {
         in the current map.
     */
     public void update(long elapsedTime) {
-        FlyingEntity player = (FlyingEntity)map.getPlayer();
-
+        if (map == null) {
+            return;
+        }
+        Player player = (Player)map.getPlayer();
 
         // player is dead! start map over
         if (player.getState() == Entity.STATE_DEAD) {
-        	/** TODO **/
-            renderer.removeAllText();
-            map = resourceManager.reloadMap();
+            reloadMap();
             return;
         }
-        
 
-
-        // get keyboard/mouse input
+        // get keyboard input
         checkInput(elapsedTime);
 
-        // update player
-        updateFlyingCreature(player, elapsedTime);
+        // update player; a map transition may replace the map
+        // mid-step, in which case everything else waits a frame
+        if (!updatePlayer(player, elapsedTime)) {
+            return;
+        }
         player.update(elapsedTime);
 
         // update other sprites
-        Iterator i = map.getSprites();
+        Iterator<Sprite> i = map.getSprites();
         while (i.hasNext()) {
-            Sprite sprite = (Sprite)i.next();
+            Sprite sprite = i.next();
             if (sprite instanceof Entity) {
                 Entity creature = (Entity)sprite;
                 if (creature.getState() == Entity.STATE_DEAD) {
                     i.remove();
+                    continue;
                 }
-                else {
-                    updateCreature(creature, elapsedTime);
+                physics.step(creature, elapsedTime);
+            }
+            else if (sprite instanceof Cat) {
+                Cat raver = (Cat)sprite;
+                if (r.stillRaving(raver.getID())) {
+                    raver.setState(Cat.STATE_RAVE);
+                    raver.setRave(true);
+                    raver.canRave(true);
                 }
-            }else if(sprite instanceof Cat){
-                	Cat raver = (Cat)sprite;
-                	if(r.stillRaving(raver.getID())){
-                		raver.setState(Cat.STATE_RAVE);
-                		raver.setRave(true);
-                		raver.canRave(true);
-                	}
-            }else if(sprite instanceof Respawn){
-            		Respawn res = (Respawn)sprite;
-            	if(player.getState() == Entity.STATE_RESPAWN){
-            			if (res.getState() == Respawn.STATE_ACTIVE) {
-                    		respawnPlayer(res, (Player)player);
-            			}
-            	}
+            }
+            else if (sprite instanceof Respawn) {
+                Respawn res = (Respawn)sprite;
+                if (player.getState() == Entity.STATE_RESPAWN
+                    && res.getState() == Respawn.STATE_ACTIVE)
+                {
+                    respawnPlayer(res, player);
+                }
             }
             // normal update
             sprite.update(elapsedTime);
         }
+
+        // hit a spike with no checkpoint touched yet: restart the map
+        if (player.getState() == Entity.STATE_RESPAWN) {
+            reloadMap();
+        }
     }
 
 
     /**
-        Updates the creature, applying gravity for creatures that
-        aren't flying, and checks collisions.
+        Moves the player for one step, checking sprite collisions after
+        each axis like the original engine. Returns false if the map
+        was swapped during the step.
     */
-    private void updateCreature(Entity creature,
-        long elapsedTime)
-    {
+    private boolean updatePlayer(Player player, long elapsedTime) {
+        TileMap current = map;
 
-        // apply gravity
-        if (!creature.isFlying()) {
-            creature.setVelocityY(creature.getVelocityY() +
-                GRAVITY * elapsedTime);
-        }
+        physics.applyGravity(player, elapsedTime);
 
-        // change x
-        float dx = creature.getVelocityX();
-        float oldX = creature.getX();
-        float newX = oldX + dx * elapsedTime;
-        Point tile =
-            getTileCollision(creature, newX, creature.getY());
-        if (tile == null) {
-            creature.setX(newX);
-        }
-        else {
-            // line up with the tile boundary
-            if (dx > 0) {
-                creature.setX(
-                    TileMapRenderer.tilesToPixels(tile.x) -
-                    creature.getWidth());
-            }
-            else if (dx < 0) {
-                creature.setX(
-                    TileMapRenderer.tilesToPixels(tile.x + 1));
-            }
-            creature.collideHorizontal();
+        physics.moveHorizontal(player, elapsedTime);
+        checkPlayerCollision(player, false);
+        if (map != current) {
+            return false;
         }
 
-        // change y
-        float dy = creature.getVelocityY();
-        float oldY = creature.getY();
-        float newY = oldY + dy * elapsedTime;
-        tile = getTileCollision(creature, creature.getX(), newY);
-        if (tile == null) {
-            creature.setY(newY);
-        }
-        else {
-            // line up with the tile boundary
-            if (dy > 0) {
-                creature.setY(
-                    TileMapRenderer.tilesToPixels(tile.y) -
-                    creature.getHeight());
-            }
-            else if (dy < 0) {
-                creature.setY(
-                    TileMapRenderer.tilesToPixels(tile.y + 1));
-            }
-            creature.collideVertical();
+        float oldY = player.getY();
+        physics.moveVertical(player, elapsedTime);
+        boolean canKill = (oldY < player.getY());
+        checkPlayerCollision(player, canKill);
+        if (map != current) {
+            return false;
         }
 
+        // fell out of the world
+        int mapBottom = TileMapRenderer.tilesToPixels(map.getHeight());
+        if (player.getY() > mapBottom + OUT_OF_WORLD_MARGIN) {
+            player.setState(Entity.STATE_DEAD);
+        }
+        return true;
     }
-    
-    private void updateFlyingCreature(FlyingEntity creature,
-            long elapsedTime)
-        {
-
-            // apply gravity
-            if (!creature.isFlying()) {
-                creature.setVelocityY(creature.getVelocityY() +
-                    GRAVITY * elapsedTime);
-            }
-
-            // change x
-            float dx = creature.getVelocityX();
-            float oldX = creature.getX();
-            float newX = oldX + dx * elapsedTime;
-            Point tile =
-                getTileCollision(creature, newX, creature.getY());
-            if (tile == null) {
-                creature.setX(newX);
-            }
-            else {
-                // line up with the tile boundary
-                if (dx > 0) {
-                    creature.setX(
-                        TileMapRenderer.tilesToPixels(tile.x) -
-                        creature.getWidth());
-                }
-                else if (dx < 0) {
-                    creature.setX(
-                        TileMapRenderer.tilesToPixels(tile.x + 1));
-                }
-                creature.collideHorizontal();
-            }
-            if (creature instanceof Player) {
-                checkPlayerCollision((Player)creature, false);
-            }
-
-            // change y
-            float dy = creature.getVelocityY();
-            float oldY = creature.getY();
-            float newY = oldY + dy * elapsedTime;
-            tile = getTileCollision(creature, creature.getX(), newY);
-            if (tile == null) {
-                creature.setY(newY);
-            }
-            else {
-                // line up with the tile boundary
-                if (dy > 0) {
-                    creature.setY(
-                        TileMapRenderer.tilesToPixels(tile.y) -
-                        creature.getHeight());
-                }
-                else if (dy < 0) {
-                    creature.setY(
-                        TileMapRenderer.tilesToPixels(tile.y + 1));
-                }
-                creature.collideVertical();
-            }
-            if (creature instanceof Player) {
-                boolean canKill = (oldY < creature.getY());
-                checkPlayerCollision((Player)creature, canKill);
-            }
-
-        }
 
 
     /**
         Checks for Player collision with other Sprites. If
-        canKill is true, collisions with Creatures will kill
+        canKill is true, collisions with Entities will kill
         them.
     */
     public void checkPlayerCollision(Player player,
@@ -519,7 +351,7 @@ public class MainGameState implements GameState {
         if (!player.isAlive()) {
             return;
         }
-        
+
         // check for player collision with other sprites
         Sprite collisionSprite = getSpriteCollision(player);
         if (collisionSprite instanceof PowerUp) {
@@ -535,7 +367,7 @@ public class MainGameState implements GameState {
                 soundManager.play(boopSound);
                 badguy.setState(Entity.STATE_DYING);
                 player.setY(badguy.getY() - player.getHeight());
-                player.jump(true);
+                player.hop();
             }
             else {
                 // player dies!
@@ -547,34 +379,42 @@ public class MainGameState implements GameState {
             if(!cuddlycat.isRave()){
             	cuddlycat.setRave(true);
                 cuddlycat.setState(Cat.STATE_RAVE);
-                
-                //renders the cat text.
+
+                // renders the cat text just above the cat
+                int textX = Math.round(cuddlycat.getX());
+                int textY = Math.round(cuddlycat.getY()) - 6;
                 if(!cfg.isDevelopment()){
-                renderer.addText(r.getStringByID(cuddlycat.getID()),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
-                r.setInfiniteRave(cuddlycat.getID());
+                    renderer.addText(r.getStringByID(cuddlycat.getID()), textX, textY);
+                    r.setInfiniteRave(cuddlycat.getID());
                 }else{
-                	renderer.addText(cuddlycat.getID(),TileMapRenderer.pixelsToTiles(cuddlycat.getX()),TileMapRenderer.pixelsToTiles(cuddlycat.getY()+10));
+                    renderer.addText(cuddlycat.getID(), textX, textY);
                 }
-                renderer.flip(true);
                 CatCounter.addCat();
             }
         }
         else if (collisionSprite instanceof Transition) {
         	Transition t = (Transition)collisionSprite;
-        	setBackground("background"+t.getRegion()+".png");
-            renderer.removeAllText();
-            System.out.println("what is: "+t.getRegion()+""+t.getMap());
-        	map = resourceManager.selectMap(t.getRegion(), t.getMap());
+            TileMap next = resourceManager.selectMap(t.getRegion(), t.getMap());
+            if (next != null) {
+                setBackground("background"+t.getRegion()+".png");
+                renderer.removeAllText();
+                setMap(next);
+            }
         }
         else if (collisionSprite instanceof Respawn) {
-        	Respawn k = (Respawn)collisionSprite;
-        	k.setState(Respawn.STATE_ACTIVE);
+            // only the most recently touched checkpoint is active
+            for (Sprite s : map.getSpriteList()) {
+                if (s instanceof Respawn) {
+                    ((Respawn)s).setState(Respawn.STATE_NORMAL);
+                }
+            }
+        	((Respawn)collisionSprite).setState(Respawn.STATE_ACTIVE);
         }
     }
 
 
     /**
-        Gives the player the speicifed power up and removes it
+        Gives the player the specified power up and removes it
         from the map.
     */
     public void acquirePowerUp(PowerUp powerUp) {
@@ -589,7 +429,6 @@ public class MainGameState implements GameState {
             // advance to next map
             soundManager.play(prizeSound,
                 new EchoFilter(2000, .7f), false);
-            //map = resourceManager.selectMap('0', '2');
         }
     }
 
